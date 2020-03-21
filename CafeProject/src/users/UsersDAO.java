@@ -44,6 +44,32 @@ public class UsersDAO {
 		return -2; 
 	}
 	
+	public int getLevel(String id) {
+		int level;
+		String SQL = "select level from users where id = ?";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				level = rs.getInt(1);
+				
+				return level;
+			}
+			return -1; 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -2; 
+	}
+	
 	public int join(Users users) {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date time = new Date();
@@ -146,5 +172,31 @@ public class UsersDAO {
 		}
 		return "N";
 	}
+	
+	public String getNick(String id) {
+			
+			String nick = null;
+			String SQL = "select nick from users where id = ?";
+			try {
+				pstmt = conn.prepareStatement(SQL);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+				nick = rs.getString("nick");
+				}
+				return nick;
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					if(rs != null) rs.close();
+					if(pstmt != null) pstmt.close();
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return nick;
+	}
+
 	
 }

@@ -30,19 +30,18 @@ function loginCheck() {
     $.ajax({
 
         type:"POST",
-        url: "/loginAjax" ,
+        url: "loginAjax.jsp" ,
         data:{
-            "_token": $('#token').val(),
             id:id,
             password:pwd
             },
             async:false,
-        dataType: "json",
+//        dataType: "json",
         success : function(data) {
 
             var result = data.substr(4);
 
-            if (result == "Y") {
+            if (result[0] == "Y") {
                 loginFlag=true;
                 page_move();
               } else {
@@ -68,7 +67,7 @@ function hideMsg(obj) {
 
 function page_move(){
     var f=document.loginForm;
-    f.action="/login";
+    f.action="loginAction.jsp";
     f.method="post";
     f.submit();
 }

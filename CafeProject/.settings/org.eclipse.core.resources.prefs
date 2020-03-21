@@ -1,3 +1,6 @@
 eclipse.preferences.version=1
+encoding//WebContent/home.jsp=UTF-8
 encoding//WebContent/inc/ariaCode.jsp=UTF-8
+encoding//WebContent/inc/footer.jsp=UTF-8
 encoding//WebContent/member/ajaxCheck.jsp=UTF-8
+encoding//WebContent/member/loginAjax.jsp=UTF-8

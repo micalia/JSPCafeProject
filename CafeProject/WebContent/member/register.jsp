@@ -36,7 +36,7 @@
             <div class="card-body">
               <div class="header">
               <center>
-              <a href="#">
+              <a href="<%=request.getContextPath()%>/home.jsp">
                 <img src="../img/cafeLogo.png"style="height:44px;">
               </a></center>
             </div>

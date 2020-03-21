@@ -52,7 +52,7 @@ String phoneInfo = nationNo + "_" +phone;
 		}else{
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
-			script.println("location.href='main.jsp'");
+			script.println("location.href='../home.jsp'");
 			script.println("</script>");
 		}
 	}else{
@@ -66,7 +66,7 @@ String phoneInfo = nationNo + "_" +phone;
 		}else{
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
-			script.println("location.href='main.jsp'");
+			script.println("location.href='../home.jsp'");
 			script.println("</script>");
 		}
 	}  

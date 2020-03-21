@@ -8,6 +8,11 @@ public class Users {
 	private String gender;
 	private String email;
 	private String phone;
+	private int level;
+	private String joinDate;
+	private String recentVisit;
+	private int writeCount;
+	private int commentCount;
 	
 	public String getId() {
 		return id;
@@ -50,6 +55,36 @@ public class Users {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	public String getJoinDate() {
+		return joinDate;
+	}
+	public void setJoinDate(String joinDate) {
+		this.joinDate = joinDate;
+	}
+	public String getRecentVisit() {
+		return recentVisit;
+	}
+	public void setRecentVisit(String recentVisit) {
+		this.recentVisit = recentVisit;
+	}
+	public int getWriteCount() {
+		return writeCount;
+	}
+	public void setWriteCount(int writeCount) {
+		this.writeCount = writeCount;
+	}
+	public int getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
 	}
 	
 	
