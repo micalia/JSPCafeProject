@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="./inc/main.jsp" %>
     <%@ page import="boards.Boards" %>
     <%@ page import="java.util.ArrayList" %>
     
-<%@ include file="./inc/main.jsp" %>
         <div class="cafe_intro">
 
         </div>
@@ -17,13 +17,13 @@
                     <col width="100">
                     <col width="80">
                     </colgroup>
-                    <%
+                   <%
                     	
                     	ArrayList<Boards> list = boardsDAO.mainGetList();
                     	for(int i = 0; i < list.size(); i++){
                     %>
                     <tr>
-                        <td class="td_subject"><b>·</b>&nbsp;&nbsp;<a class = "subjectcss" href ="./board/view.jsp?id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject() %></td>
+                        <td class="td_subject"><b>·</b>&nbsp;&nbsp;<a class = "subjectcss" href ="./board/view.jsp?id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject() %></a></td>
                         <td class="td_nick"><%= list.get(i).getNick() %></td>
                         <td class="td_date"><%= list.get(i).getUploadDate().substring(0, 10).replace("-", "/") %></td>
                         <td class="td_view"><%= list.get(i).getHit() %></td>

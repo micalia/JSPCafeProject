@@ -3,6 +3,7 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="boards.Boards" %>
 <%@ page import="boards.Board_ids" %>
+
 <%@ include file="../inc/main.jsp" %>
 
 <%
@@ -17,6 +18,7 @@
 		script.println("location.href = '../home.jsp'");
 		script.println("</script>");
 	}
+	
 	Boards boards = boardsDAO.show(b_id);
 	%>
 	<style>
@@ -32,13 +34,15 @@
 	</style>
 	<div class = "content-border" style="padding:14px;">
  
-    <b><%= boards.getSubject() %></b> &nbsp;
+   <b><%= boards.getSubject() %></b> &nbsp;
     <span style="color:gray;">|</span>&nbsp; 
     <%= boards.getBoardName() %>
     <div style="float:right;font-size:14px;color:#666;padding-top:1px;"><%= boards.getUploadDate().substring(0, 16).replace("-", ".") %></div>
 
     <div class = "board-box-line-dashed" style="margin-top:3px;"></div>
-      <div style="padding-top:8px;"><img src="#" style="width: 24px; height: 24px; float:left; border-radius:50%;margin-right:4px;"class="profileImg"><b><%= boards.getNick() %>(<%= boards.getUser_id().substring(4) %>****)</b></div>
+      <div style="padding-top:8px;">
+      <img src="<%=request.getContextPath()%>/img/profile.jpg" style="border: none;width: 24px; height: 24px; float:left; border-radius:50%;margin-right:4px;"class="profileImg"><b><%= boards.getNick() %>(<%= boards.getUser_id().substring(4) %>****)</b>
+      </div>
     <div class="boardContent">
     <%= boards.getContent() %>
     </div>

@@ -14,11 +14,11 @@
 </head>
 <body>
 	<%
-		String userID = null;
+		String id = null;
 		if (session.getAttribute("id") != null){
-			userID = (String) session.getAttribute("id");
+			id = (String) session.getAttribute("id");
 		}
-		if(userID != null){
+		if(id != null){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('이미 로그인이 되어있습니다.')");

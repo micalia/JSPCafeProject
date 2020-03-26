@@ -7,16 +7,9 @@
 <jsp:setProperty name="boards" property="subject"/>
 <jsp:setProperty name="boards" property="content"/>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
-</head>
-<body>
 	<%	
-		int board_id = Integer.parseInt(request.getParameter("boardid"));
-	
+		int board_id = Integer.parseInt(request.getParameter("board_id"));
+
 		String id = null;
 		if (session.getAttribute("id") != null){
 			id = (String) session.getAttribute("id");
@@ -58,8 +51,6 @@
 					}  
 				}
 		
-		} 
+		}  
 		
 	%>
-</body>
-</html>

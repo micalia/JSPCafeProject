@@ -86,7 +86,7 @@ input[class="form-control"] {
                   </span>
 
                   <span class="form-group">
-                        <a class="btn btn-link" href="#" style="padding:0px; float:right;">
+                        <a class="btn btn-link" href="../auth/ResetPassword.jsp" style="padding:0px; float:right;">
                             비밀번호를 잊으셨나요?
                         </a>
                     </span>
