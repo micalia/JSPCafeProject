@@ -37,20 +37,22 @@ public class BoardsDAO {
 		return "";
 	}
 
-	public int getNext() {
-		String SQL = "select id from boards order by id desc";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				return rs.getInt(1) + 1;
-			}
-			return 1; // 첫번째 게시물인 경우
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return -1;// 데이터베이스오류
-	}
+	
+	  public int getNext() { 
+		  String SQL = "select id from boards order by id desc";
+		  try { 
+			  PreparedStatement pstmt = conn.prepareStatement(SQL);
+			  rs = pstmt.executeQuery(); 
+			  if (rs.next()) { 
+				  return rs.getInt(1) + 1; 
+				  } 
+			  return 1;// 첫번째 게시물인 경우 
+			  } catch (Exception e) {
+				  e.printStackTrace(); 
+			  } 
+		  return -1; //데이터베이스오류 
+	  }
+	
 
 	public String getBoardName(int board_id) {
 		String SQL = "select boardName from board_ids where board_id = ?";
@@ -170,20 +172,13 @@ public class BoardsDAO {
 		return menuList;
 	}
 
-	public boolean nextPage(int pageNumber) {
-		String SQL = "select * from boards where id < ?";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, getNext() - (pageNumber - 1) * 14);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+	/*
+	 * public boolean nextPage(int pageNumber) { String SQL =
+	 * "select * from boards where id < ?"; try { PreparedStatement pstmt =
+	 * conn.prepareStatement(SQL); pstmt.setInt(1, getNext() - (pageNumber - 1) *
+	 * 14); rs = pstmt.executeQuery(); if (rs.next()) { return true; } } catch
+	 * (Exception e) { e.printStackTrace(); } return false; }
+	 */
 
 	public int hitUp(int id) {
 		String SQL = "update boards set hit = hit + 1 where id = ?";
@@ -198,7 +193,6 @@ public class BoardsDAO {
 	}
 
 	public Boards show(int id) {
-		hitUp(id);
 		try {
 			String SQL = "select * from boards where id = ?";
 			PreparedStatement pstmt = conn.prepareStatement(SQL);

@@ -3,14 +3,25 @@
 <%@ include file="./inc/main.jsp" %>
     <%@ page import="boards.Boards" %>
     <%@ page import="java.util.ArrayList" %>
-    
+    <style>
+    .mainTableList td{
+    	height: 28px;
+    	padding-top:6px;
+    	padding-botton:6px;
+		border-bottom: 1px solid #e5e5e5;
+    }
+    .allList{
+    	padding-bottom: 8px;
+	border-bottom: 1px solid #777777;
+    }
+    </style>
         <div class="cafe_intro">
 
         </div>
 
             <div class="tableContainer">
                 <div class="allList">전체글보기</div>
-                <table>
+                <table class="mainTableList">
                     <colgroup>
                     <col>
                     <col width="120">

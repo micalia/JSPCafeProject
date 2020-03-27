@@ -100,12 +100,8 @@ p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset
 }
 table{
     width: 100%;
-    border:1px solid black;
-    border-collapse: collapse;
 }
-th, td {
-    border: 1px solid #444444;
-  }
+
 .tableContainer{
     margin-top:24px;
 }
@@ -183,8 +179,6 @@ td{
 	<%
 		if(id == null){
 	%>
-     
-      게스트
       <a href="<%=request.getContextPath()%>/member/login.jsp">로그인</a>
       <%
 		}else{

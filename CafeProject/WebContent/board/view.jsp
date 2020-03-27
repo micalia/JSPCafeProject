@@ -20,6 +20,11 @@
 	}
 	
 	Boards boards = boardsDAO.show(b_id);
+	if(session.getAttribute("nick") != null){
+	if(!session.getAttribute("nick").equals(boards.getNick()))boardsDAO.hitUp(b_id);
+	}else{
+		boardsDAO.hitUp(b_id);
+	}
 	%>
 	<style>
 	.board-box-line-dashed{

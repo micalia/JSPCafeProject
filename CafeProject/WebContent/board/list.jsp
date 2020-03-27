@@ -30,7 +30,78 @@
 	
 
 %>
+<style>
+.article-board{
+	width: 100%;
+	word-break: break-all;
+	word-wrap: break-word;
+	word-break: break-word;
+	table-layout: fixed;
+	border-collapse: collapse;
+	font-size:13px !important;
+}
+.article-board thead th{
+	height: 40px;
+	padding: 2px;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #e5e5e5;
+	text-align: center;
+}
+.article-board tbody td {
+	height: 28px;
+	padding: 6px 7px;
+	border-bottom: 1px solid #e5e5e5;
+}
+.article-board .td_date {
+	text-align: center;
+	white-space: nowrap;
+}
+.article-board .td_view {
+	text-align: center;
+}
+.article-board .td_num {
+	text-align: center;
+}
+ .article-board .td_subject a{
+	color:black;
+}
+.pagination {
+  display: inline-block;
+  font-size:15px;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 6px 10px;
+  text-decoration: none;
+ 
+  margin:0 3px;
+}
+
+.pagination a.active {
+  color:#26a8ff;
+  border: 1px solid #ddd;
+  background-color:white;
+}
+
+.pagination a:hover {text-decoration:underline;}
+.paging{
+	margin-top: 26px;
+	height: 40px;
+	text-align: center;
+} 
+
+</style>
+<div class = "article-board">
 <table>
+<colgroup>
+<col style="width:88px;">
+<col>
+<col style="width:118px;">
+<col style="width:91px;">
+<col style="width:68px;">
+</colgroup>
 	<thead>
 		<tr>
 			<th></th>
@@ -49,11 +120,11 @@
 			%>
 
 			<tr>
-				<td><%= list.get(i).getId()%></td>
-				<td><a href = "view.jsp?id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
+				<td class="td_num"><%= list.get(i).getId()%></td>
+				<td class="td_subject"><a href = "view.jsp?id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
 				<td><%= list.get(i).getNick()%></td>
-				<td><%= list.get(i).getUploadDate().substring(0, 10).replace("-", ".")%></td>
-				<td><%= list.get(i).getHit()%></td>
+				<td class="td_date"><%= list.get(i).getUploadDate().substring(0, 10).replace("-", ".")%></td>
+				<td class="td_view"><%= list.get(i).getHit()%></td>
 			</tr>
 		<%
 		cot--;
@@ -61,7 +132,10 @@
 		%> 
 	</tbody>
 </table>
+</div>
 
+<div class="paging">
+<div class="pagination">
 <%	// 페이징  처리
 						if(count > 0){
 						
@@ -97,29 +171,31 @@
 							int pageBlock = 10;
 							if(currentPage>pageBlock){ // 페이지 블록수보다 startPage가 클경우 이전 링크 생성
 					%>
-								<a href="list.jsp?page=<%=prev_group%>">[이전]</a>	
+						<a href="list.jsp?page=<%=prev_group%>">이전</a>
 					<%			
 							}
 							for(int i=startPage; i < endPage; i++){ // 페이지 블록 번호
 								if(i >pageCount2)break;
 							if(i==currentPage){ // 현재 페이지에는 링크를 설정하지 않음
 					%>
-									[<%=i %>]
+								<a href="list.jsp?page=<%=i%>"class="active"><%=i %></a>
 					<%									
 								}else{ // 현재 페이지가 아닌 경우 링크 설정
 					%>
-									<a href="list.jsp?page=<%=i%>">[<%=i %>]</a>
+									<a href="list.jsp?page=<%=i%>"><%=i %></a>
 					<%	
 								}
 							} // for end
 							
 							if(endPage <pageCount2){ // 현재 블록의 마지막 페이지보다 페이지 전체 블록수가 클경우 다음 링크 생성
 					%>
-								<a href="list.jsp?page=<%=startPage + 10 %>">[다음]</a>
+								<a href="list.jsp?page=<%=startPage + 10 %>">다음</a>
 					<% 
 								}
 							}
 						}
 					%>
-
+								</div>
+		
+</div> 
 <%@ include file="../inc/footer.jsp" %> 
