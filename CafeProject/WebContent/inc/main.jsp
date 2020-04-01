@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ page import="boards.BoardsDAO" %>
+    <%@ page import="admins.AdminsDAO" %>
     <%@ page import="boards.Board_ids" %>
     <%@ page import="users.UsersDAO" %>
     <%@ page import="java.util.ArrayList" %>
@@ -31,7 +32,6 @@ p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset
     border: 1px solid;
     width:1080px;
     height: 180px;
-    margin-top:12px;
   }
   
   #banner:hover{
@@ -76,11 +76,15 @@ p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset
     text-align: center;
     color: #959595;
   }
-  .gm-tcol-t{
-        color: black;
-  }
+  
   .profileImg{
-    border: 1px solid;
+	border: 1px solid;
+	width: 58px;
+	height: 58px; 
+	border: 1px solid rgba(0, 0, 0, 0.04);
+	float:left; 
+	border-radius:22px; 
+	margin-right: 8px;
   }
   .cafe_intro{
     border: 1px solid;
@@ -140,7 +144,12 @@ td{
     #menuIcon{
     margin-bottom:5px;
     }
-    #info-data{
+    #info-data1{
+    	padding: 12px 10px;
+    	overflow: hidden;
+    	width: 100%;
+    }
+    #info-data2{
     	padding: 12px 10px;
     	overflow: hidden;
     	width: 100%;
@@ -159,6 +168,25 @@ td{
     	    border-top: 1px solid #e5e5e5;
     	    height: 2px;
     }
+    .cafe-menu-list a{
+    	color:black;
+    }
+    .infoText{
+    	cursor:pointer;
+    }
+    .infoText:hover{
+    	text-decoration:underline;
+    }
+    .infoTextActive{
+    	color:black;
+    }
+    .infoTextActive:hover{
+    	text-decoration:none;
+    	cursor:text;
+    }
+    .topbar{
+    	margin:1px 0px;
+    }
 </style>
   </head>
   <body>
@@ -176,6 +204,7 @@ td{
 		level = (int) session.getAttribute("level");
 	}
 	%>
+	<div class="topbar">
 	<%
 		if(id == null){
 	%>
@@ -183,35 +212,58 @@ td{
       <%
 		}else{
 	%>
-     <%= nick %>님 접속중
-      아이디 : <%= id %>
-       레벨 : <%= level %>
-      <a href="<%=request.getContextPath()%>/member/logout.jsp">로그아웃</a>
+     <%= nick %>
+      
+     <a href="<%=request.getContextPath()%>/member/logout.jsp">로그아웃</a>
       
     <%
 		}
 	%>
- 
-<div id="banner" onclick = "location.href='<%=request.getContextPath()%>/home.jsp'" >
-    <a href ="<%=request.getContextPath()%>/home.jsp"></a>
+</div>
+<div id="banner" style="clear:both;"onclick = "location.href='<%=request.getContextPath()%>/home.jsp'" >
+    <a href ="<%=request.getContextPath()%>/home.jsp">
+    <% AdminsDAO adminsDAO = new AdminsDAO(); 
+    String titleImg = adminsDAO.getTitleImg();
+    if(titleImg == null){
+    %>
+    <center>
+     <a href="<%=request.getContextPath()%>/home.jsp">
+       <img src="<%=request.getContextPath()%>/img/cafeLogo.png"style="height:61px;margin-top:53px;">
+     </a></center>
+              <%}else{ %>
+    <img src="<%=titleImg %>" style="width:1080px;height:180px;">
+    <%} %>
+    </a>
 </div>
 
 <div class="content-area">
-<div class="side-area">
+<div class="side-area" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 <div id="bodyLeft">
  <div id="profile">
     <ul class="profileTop">
-      <li class="profileTop1"><p class="gm-tcol-t">카페정보</p></li>
-      <li class="profileTop2">나의정보</li>
+      <li class="profileTop1" onclick="infoData1()"><span id = "cafeInfo" class="infoText infoTextActive">카페정보</span></li>
+      <li class="profileTop2" onclick="<% if(session.getAttribute("id") == null){ %> alert('로그인이 필요합니다') <% }else{ %>infoData2()<%}%>"><span id = "myInfo" class="infoText">나의정보</span></li>
     </ul>
      <div class="profileSecond">
-     <div id="info-data">
-     <img src="<%=request.getContextPath()%>/img/profile.jpg" style="width: 58px; height: 58px; border: 1px solid rgba(0, 0, 0, 0.04);float:left; border-radius:22px; margin-right: 25px;" class="profileImg">
+     <div id="info-data1">
+     <img src="<%=request.getContextPath()%>/img/profile.jpg" class="profileImg">
      <%if(level > 11){ %>
       <a href="<%=request.getContextPath()%>/cafeAdmin/ManageHome.jsp">카페관리</a>
       <% } %>
       </div>
-
+      <%if(session.getAttribute("id") != null){ %>
+      <div id="info-data2" style="display:none;">
+     <img src="<%=request.getContextPath()%>/img/profile.jpg" class="profileImg">
+     <% if(nick.length()>6){%>
+     <%= nick.substring(0,6) %>..<br>
+    	 <%}else{ %>
+    	 <%=nick %>
+    	 <%} %>
+    	 <br>
+ 
+       레벨 : <%= level %>
+      </div>
+<%} %>
 	<%
 		if(id != null){
 	%>
@@ -292,9 +344,9 @@ td{
   <ul class = "cafe-menu-list">
   
   <%
-      	BoardsDAO boardsDAO = new BoardsDAO();
-      	ArrayList<Board_ids> menuList = boardsDAO.mainGetMenuList();
-      	for(int i = 0; i < menuList.size(); i++){
+	BoardsDAO boardsDAO = new BoardsDAO();
+	ArrayList<Board_ids> menuList = boardsDAO.mainGetMenuList();
+	for(int i = 0; i < menuList.size(); i++){
       %>
 
   <li>
@@ -352,12 +404,30 @@ td{
 </g>
 </svg>
 
- <%= menuList.get(i).getBoardName() %></li>
+ <a href = "<%=request.getContextPath()%>/board/list.jsp?board_id=<%= menuList.get(i).getBoard_id()%>"><%= menuList.get(i).getBoardName() %></a></li>
 <%
       	}
 %>
   </ul>
 </nav>
 </div>
+<script>
+function infoData1(){
+		var d2 = document.getElementById("info-data2");
+		var d1 = document.getElementById("info-data1");
+		d2.style.display = "none";
+		d1.style.display = "block";
+		document.getElementById("cafeInfo").classList.add("infoTextActive");
+		document.getElementById("myInfo").classList.remove("infoTextActive");
+}
+function infoData2(){
+		var d1 = document.getElementById("info-data1");
+		var d2 = document.getElementById("info-data2");
+		d1.style.display = "none";
+		d2.style.display = "block";
+		document.getElementById("myInfo").classList.add("infoTextActive");
+		document.getElementById("cafeInfo").classList.remove("infoTextActive");
+}
+</script>
 <div class = "main-area"> 
 

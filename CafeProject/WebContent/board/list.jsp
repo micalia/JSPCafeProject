@@ -6,27 +6,39 @@
 
 <%@ include file="../inc/main.jsp" %>   
 <%
-	int count = boardsDAO.getCount(); //전체글수 php_total_article
-	int pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
-	// 페이지 링크를 클릭한 번호 / 현재 페이지
+String board_id = request.getParameter("board_id");
+int count, pageSize, currentPage, startRow, cot;
+ArrayList<Boards> list = null;
+if(board_id == null){
+	count = boardsDAO.getCount(); //전체글수 php_total_article
+	pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
 	String pageNum = request.getParameter("page");
 	if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
 		pageNum = "1";
 	}
-	int currentPage = Integer.parseInt(pageNum);
-	int startRow = (currentPage - 1) * pageSize;//php_start
-	int cot =count-(pageSize*(currentPage-1));
-	ArrayList<Boards> list = null;
+	currentPage = Integer.parseInt(pageNum);
+	startRow = (currentPage - 1) * pageSize;//php_start
+	cot =count-(pageSize*(currentPage-1));
 	if (count > 0) {
-		// getList()메서드 호출 / 해당 레코드 반환
 		list = boardsDAO.getList(startRow, pageSize);
 	}
 
-	// 연산을 하기 위한 pageNum 형변환 / 현재 페이지
+}else{
+	int boardId = Integer.parseInt(board_id);
+	count = boardsDAO.getCountInMenu(boardId); //전체글수 php_total_article
+	pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
+	String pageNum = request.getParameter("page");
+	if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
+		pageNum = "1";
+	}
+	currentPage = Integer.parseInt(pageNum);
+	startRow = (currentPage - 1) * pageSize;//php_start
+	cot =count-(pageSize*(currentPage-1));
+	if (count > 0) {
+		list = boardsDAO.getListInMenu(boardId, startRow, pageSize);
+	}
 
-	// 해당 페이지에서 시작할 레코드 / 마지막 레코드
-	//int endRow = currentPage * pageSize;
-
+}
 	
 
 %>
@@ -91,7 +103,10 @@
 	height: 40px;
 	text-align: center;
 } 
-
+.nodata{
+    padding: 100px 0;
+    text-align: center;
+}
 </style>
 <div class = "article-board">
 <table>
@@ -170,31 +185,47 @@
 							// 한 페이지에 보여줄 페이지 블럭(링크) 수
 							int pageBlock = 10;
 							if(currentPage>pageBlock){ // 페이지 블록수보다 startPage가 클경우 이전 링크 생성
-					%>
-						<a href="list.jsp?page=<%=prev_group%>">이전</a>
-					<%			
+							if(board_id == null){ %>
+									<a href="list.jsp?page=<%=prev_group%>">이전</a>
+							<%	}else{%>
+									<a href="list.jsp?board_id=<%=board_id %>&page=<%=prev_group%>">이전</a>
+								<%	}
 							}
 							for(int i=startPage; i < endPage; i++){ // 페이지 블록 번호
 								if(i >pageCount2)break;
 							if(i==currentPage){ // 현재 페이지에는 링크를 설정하지 않음
-					%>
-								<a href="list.jsp?page=<%=i%>"class="active"><%=i %></a>
-					<%									
-								}else{ // 현재 페이지가 아닌 경우 링크 설정
-					%>
-									<a href="list.jsp?page=<%=i%>"><%=i %></a>
-					<%	
-								}
+										if(board_id == null){%>
+											<a href="list.jsp?page=<%=i%>"class="active"><%=i %></a>
+										<%	}else{	%>
+											<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"class="active"><%=i %></a>
+											<% }
+									}else{ // 현재 페이지가 아닌 경우 링크 설정
+										if(board_id == null){	%>
+											<a href="list.jsp?page=<%=i%>"><%=i %></a>
+										<%	}else{%>
+											<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"><%=i %></a>
+											<%}
+										}
 							} // for end
 							
 							if(endPage <pageCount2){ // 현재 블록의 마지막 페이지보다 페이지 전체 블록수가 클경우 다음 링크 생성
-					%>
-								<a href="list.jsp?page=<%=startPage + 10 %>">다음</a>
-					<% 
+											if(board_id == null){%>
+												<a href="list.jsp?page=<%=startPage + 10 %>">다음</a>
+											<% }else{%>
+												<a href="list.jsp?board_id=<%=board_id %>&page=<%=startPage + 10 %>">다음</a>
+											<%}
 								}
 							}
-						}
-					%>
+						}else{%>
+							<tr>
+							<td colspan="6">
+							<div class="nodata">등록된 게시글이 없습니다.</div>
+							</td>
+							</tr>
+							</tbody>
+							</table>
+							</div>
+						<% }%>
 								</div>
 		
 </div> 

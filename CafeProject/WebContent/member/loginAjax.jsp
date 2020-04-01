@@ -12,11 +12,11 @@
  
 	    if(id !=null || password != null){
 	        try{
-	            String query="SELECT * FROM users WHERE id='"+id+"'";
+	            String query="SELECT password FROM users WHERE id='"+id+"'";
 	            ps=connection.prepareStatement(query);
 	            rs=ps.executeQuery();
 	            while (rs.next()) {
-	            	dbname=rs.getString("id");
+	            	dbname=rs.getString("password");
 	            }
 	            if(dbname.equals(password)){
 	            	String status="NNNNY";

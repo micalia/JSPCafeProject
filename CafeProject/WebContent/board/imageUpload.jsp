@@ -10,7 +10,6 @@ java.util.Calendar cal = java.util.Calendar.getInstance();
 String year = Integer.toString(cal.get ( cal.YEAR ));
 String month = Integer.toString(cal.get ( cal.MONTH ) + 1) ;
 String time = year + month;
-System.out.println(time);
 
 String uploadFolder = "board/upload/" + time;
 ServletContext context = getServletContext();
@@ -27,7 +26,6 @@ if(!Folder.exists()) {
 	    e.getStackTrace();
 	} 
 }
-System.out.println(request);
 %>
 <% 
 //String upsloadPath = request.getRealPath("upload");
@@ -45,7 +43,6 @@ try{
 }
 String filePath = "/CafeProject/board/upload/" + time + "/" + fileName;
 
-System.out.println(filePath);
 JSONObject json = new JSONObject();
 json.put("url", filePath);
 

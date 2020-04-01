@@ -59,7 +59,7 @@
                   <div class="cols-sm-10">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                      <input type="password" value = "asdfdfgdd"class="form-control" name="password" id="pswd1"maxlength="25" />
+                      <input type="password" value = "asdfasdf"class="form-control" name="password" id="pswd1"maxlength="25" />
                     </div>
                     <span class="error_next_box" id="pswd1Msg" style="display:none;" aria-live="assertive"></span>
                   </div>
@@ -70,7 +70,7 @@
                   <div class="cols-sm-10">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                      <input type="password" value = "asdfdfgdd"class="form-control"id="pswd2"maxlength="25"/>
+                      <input type="password" value = "asdfasdf"class="form-control"id="pswd2"maxlength="25"/>
                     </div>
                     <span class="error_next_box" id="pswd2Msg" style="display:none;" aria-live="assertive"></span>
                   </div>
