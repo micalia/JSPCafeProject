@@ -6,14 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
-<!-- <style>
-.title_box{
-	width:954px;
-	height:298px;
-	border:1px solid black;
-	margin:0 auto;
-}
-</style> -->
+
 <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>  
 <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/croppie.js"></script>
@@ -24,27 +17,33 @@
 <style>
 #uploaded_image{
 	border:1px solid black;
-	width:1080px;
-	height:180px;
+	width:150px;
+	height:150px;
 }
 .img-thumbnail{
 	padding:0px;
 }
 .modal-dialog{
-	width:1145px;
+	width:574px;
 }
 .cr-boundary{
 	margin-left:17px;
 	border:1px solid black;
 }
 input[type=range]{
-	width:1080px;
+	width:338px;
 }
 .cr-slider{
 	max-width:1080px;
 }
 .croppie-container .cr-slider-wrap{
 	margin:15px 0px;
+}
+.container{
+	width:625px;
+}
+#image_demo{
+	margin:0 auto;
 }
 </style>
 <center style="margin-top:42px;">
@@ -73,13 +72,13 @@ input[type=range]{
 		<div class="modal-content">
       		<div class="modal-header">
         		<button type="button" class="close" data-dismiss="modal">&times;</button>
-        		<h4 class="modal-title">타이틀 이미지 업로드</h4>
+        		<h4 class="modal-title">카페 프로필 이미지 업로드</h4>
       		</div>
       		<div class="modal-body">
         		<div class="row">
-  					<div class="col-md-8 text-center" style="padding-left:30px;">
-						  <div id="image_demo" style="width:350px; margin-top:30px"></div>
-						  <button class="btn btn-success crop_image"style="margin-top:5px;margin-left:331px;">이미지 업로드</button>
+  					<div class="col-md-8 text-center" style="width:100%;">
+						  <div id="image_demo" style="width:350px;"></div>
+						  <button class="btn btn-success crop_image"style="margin-top:5px;">이미지 업로드</button>
   					</div>
   					
 					
@@ -101,13 +100,13 @@ $(document).ready(function(){
     enableExif: true,
     maxZoom: 10,
     viewport: {
-      width:1080,
-      height:180,
+      width:150,
+      height:150,
       type:'square' //circle
     },
     boundary:{
-      width:1080,
-      height:180
+      width:150,
+      height:150
     }
   });
 	
@@ -129,7 +128,7 @@ $(document).ready(function(){
       size: 'viewport'
     }).then(function(response){
       $.ajax({
-        url:"uploadTitle.jsp",
+        url:"cafeProfileUpload.jsp",
         type: "POST",
         data:{"image": response},
         success:function(data)
@@ -147,7 +146,7 @@ $(document).ready(function(){
       var imageData=$("#imageData").val();
 
       $.ajax({
-                  url: "titleUpload.jsp",
+                  url: "cafeProfileAction.jsp",
                   type: 'post',
                   data: {
                   		'imageData':imageData,

@@ -4,7 +4,7 @@
     <%@ page import="boards.Board_ids" %>
     <%@ page import="java.util.ArrayList" %>
 <%@ include file="./layouts/checkPermission.jsp" %>
-<center>
+<center style="margin-top:42px;">
     <a href="<%=request.getContextPath()%>/home.jsp">
       <img src="<%=request.getContextPath()%>/img/cafeLogo.png"style="height:61px;">
     </a>
@@ -12,22 +12,38 @@
 <style>
 #menuList{
     border:1px solid black;
-    width:500px;
+    width:513px;
     height:400px;
-    float:left;
-    margin-right:12px;
+    margin-top:9px;
 }
 ul{
     list-style:none;
     padding-left:0px;
+    margin-top:6px;
+    margin-bottom:6px;
 }
 label{
     cursor: pointer;
 }
+#contentBox{
+	width:517px;
+	overflow:hidden;
+	margin:0 auto;
+	margin-top:20px;
+}
 </style>
+<div id="contentBox">
+<form action="insertMenu.jsp" method="post">
+    메뉴 추가
+    <input type="text" name="boardName" autocomplete="off" autofocus>
+    <input type="submit" value="추가">
+  </form>
 
+메뉴이름 수정 
+    <input type="text" id="changeMenu"style="margin-top:6px;" readonly> => <input type="text" id="changeMenuAction">
+    <button class="update">수정</button><br>
 
-<button class="delete">삭제</button>
+<button class="delete" style="margin-top:6px;">선택한 메뉴 삭제</button>
 <div id="menuList">
     <ul>
      <%
@@ -40,16 +56,7 @@ label{
     </ul>
 </div>
 
-<form action="insertMenu.jsp" method="post">
-    게시판 추가
-    <input type="text" name="boardName" autocomplete="off" autofocus>
-    <input type="submit" value="추가">
-  </form>
-
-게시판이름 수정 
-    <input type="text" id="changeMenu" readonly> => <input type="text" id="changeMenuAction">
-    <button class="update">수정</button>
-
+</div>
 
   <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"

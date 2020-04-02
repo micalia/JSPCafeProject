@@ -71,6 +71,30 @@ public int gateContentUpdate(String gateContent) {
 	return -1;
 }
 
+public int cafeProfileImgInsert(String imgData) {
+	String SQL = "insert into cafe_profile_image(id, cafeProfileImage) values(1, ?)";
+	try {
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		pstmt.setString(1, imgData);
+		return pstmt.executeUpdate();
+	}catch(Exception e){
+		e.printStackTrace();
+	}
+	return -1;
+}
+
+public int cafeProfileImgUpdate(String imgData) {
+String SQL = "update cafe_profile_image set cafeProfileImage = ? where id = 1";
+try {
+	PreparedStatement pstmt = conn.prepareStatement(SQL);
+	pstmt.setString(1, imgData);
+	return pstmt.executeUpdate();
+}catch(Exception e){
+	e.printStackTrace();
+}
+return -1;
+}
+
 	public String getTitleImg() {
 		try {
 			String SQL = "select title_image from title_image where id = 1";
@@ -130,6 +154,30 @@ public int gateContentUpdate(String gateContent) {
 	public int getGateCount(){
 		int count = 0;
 		String sql = "select count(*) from gate_content where id=1";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+
+	public int getCafeProfileImgCount(){
+		int count = 0;
+		String sql = "select count(*) from cafe_profile_image where id=1";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
