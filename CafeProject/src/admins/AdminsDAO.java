@@ -23,6 +23,18 @@ public class AdminsDAO {
 			}
 		}
 
+		public int titleImageInsert(String title_image) {
+			String SQL = "insert into title_image(id, title_image) values(1, ?)";
+			try {
+				PreparedStatement pstmt = conn.prepareStatement(SQL);
+				pstmt.setString(1, title_image);
+				return pstmt.executeUpdate();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			return -1;
+		}
+		
 	public int titleImageUpdate(String title_image) {
 		String SQL = "update title_image set title_image = ? where id = 1";
 		try {
@@ -34,6 +46,30 @@ public class AdminsDAO {
 		}
 		return -1;
 	}
+
+	public int gateContentInsert(String gateContent) {
+		String SQL = "insert into gate_content(id, gateContent) values(1, ?)";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, gateContent);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+public int gateContentUpdate(String gateContent) {
+	String SQL = "update gate_content set gateContent = ? where id = 1";
+	try {
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		pstmt.setString(1, gateContent);
+		return pstmt.executeUpdate();
+	}catch(Exception e){
+		e.printStackTrace();
+	}
+	return -1;
+}
 
 	public String getTitleImg() {
 		try {
@@ -49,5 +85,69 @@ public class AdminsDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public String getGateContent() {
+		try {
+			String SQL = "select gateContent from gate_content where id = 1";
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				String admins = rs.getString(1);
+				
+				return admins;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public int getCount(){
+		int count = 0;
+		String sql = "select count(*) from title_image where id=1";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+	
+	public int getGateCount(){
+		int count = 0;
+		String sql = "select count(*) from gate_content where id=1";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
 	}
 }

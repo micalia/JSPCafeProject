@@ -87,9 +87,10 @@ p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset
 	margin-right: 8px;
   }
   .cafe_intro{
-    border: 1px solid;
+  border:4px solid #eee;
+    overflow:hidden;
     width:860px;
-    height: 290.4px;
+    height: auto;
   }
 
   .content-area{
@@ -231,7 +232,10 @@ td{
        <img src="<%=request.getContextPath()%>/img/cafeLogo.png"style="height:61px;margin-top:53px;">
      </a></center>
               <%}else{ %>
-    <img src="<%=titleImg %>" style="width:1080px;height:180px;">
+              <script>
+              document.getElementById("banner").style.border="0px";
+              </script>
+    <img src="<%=titleImg %>" onerror="window.location.reload()" style="width:1080px;height:180px;">
     <%} %>
     </a>
 </div>

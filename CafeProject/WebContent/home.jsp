@@ -15,8 +15,14 @@
 	border-bottom: 1px solid #777777;
     }
     </style>
-        <div class="cafe_intro">
-
+        <div class="cafe_intro" id="cafe_intro">
+<%		String gateContent = adminsDAO.getGateContent();
+		if(gateContent == null){
+%>
+<img src="<%=request.getContextPath()%>/img/DefaultGateImg.png"style="width:860px; height:290.4px;">
+<%}else{ %>
+		<%=gateContent %>
+<%} %>
         </div>
 
             <div class="tableContainer">

@@ -23,11 +23,9 @@ imageName = unixTime + ".png";
 String uploadFolder = "cafeAdmin/title/upload/" + imageName;
 ServletContext context = getServletContext();
 String uploadPath = context.getRealPath(uploadFolder);
-
 BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(decodeBytes));
 ByteArrayOutputStream baos = new ByteArrayOutputStream();
 ImageIO.write(bufImg, "png", baos);
-ImageIO.write(bufImg, "png", new File(uploadPath));
 ImageIO.write(bufImg, "png", new File(uploadPath));
 baos.flush();
 byte[] imageInByteArray = baos.toByteArray();
