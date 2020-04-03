@@ -50,5 +50,15 @@
                    %>
                 </table>
             </div>
-
+<script>
+    var i, frames;
+    frames = document.getElementsByTagName("iframe");
+    for (i = 0; i < frames.length; ++i)
+    {
+          // The iFrame
+        if (!frames[i].hasAttribute("allowfullscreen")) {
+            frames[i].setAttribute('allowFullScreen', '')
+        }
+    }
+    </script>
 <%@ include file="./inc/footer.jsp" %>

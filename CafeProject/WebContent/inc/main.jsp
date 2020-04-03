@@ -235,7 +235,7 @@ td{
               <script>
               document.getElementById("banner").style.border="0px";
               </script>
-    <img src="<%=titleImg %>" onerror="window.location.reload()" style="width:1080px;height:180px;">
+    <img src="<%=titleImg %>" onerror="this.src='<%=request.getContextPath()%>/img/titleLoading.png';window.location.reload()" style="width:1080px;height:180px;">
     <%} %>
     </a>
 </div>
@@ -250,7 +250,14 @@ td{
     </ul>
      <div class="profileSecond">
      <div id="info-data1">
+     <% String cafeProfileImg = adminsDAO.getCafeProfileImg(); 
+     if(cafeProfileImg == null){
+     %>
      <img src="<%=request.getContextPath()%>/img/profile.jpg" class="profileImg">
+     <%}else{ %>
+     <img src="<%=cafeProfileImg%>" onerror="this.src='<%=request.getContextPath()%>/img/profile.jpg';window.location.reload()" class="profileImg">
+     <%} %>
+     <span style="font-size:12px;border:1px solid gray;padding:0px 2px;">매니저</span><br> Seolbin<br>
      <%if(level > 11){ %>
       <a href="<%=request.getContextPath()%>/cafeAdmin/ManageHome.jsp">카페관리</a>
       <% } %>
@@ -258,8 +265,8 @@ td{
       <%if(session.getAttribute("id") != null){ %>
       <div id="info-data2" style="display:none;">
      <img src="<%=request.getContextPath()%>/img/profile.jpg" class="profileImg">
-     <% if(nick.length()>6){%>
-     <%= nick.substring(0,6) %>..<br>
+     <% if(nick.length()>8){%>
+     <%= nick.substring(0,8) %>..
     	 <%}else{ %>
     	 <%=nick %>
     	 <%} %>

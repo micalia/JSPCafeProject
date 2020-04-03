@@ -8,7 +8,6 @@
 
 	AdminsDAO adminsDAO = new AdminsDAO();
 int Count = adminsDAO.getCafeProfileImgCount();
-System.out.println(Count);
 if(Count == 0){
 	int result = adminsDAO.cafeProfileImgInsert(request.getParameter("imageData"));
 	if(result == -1){

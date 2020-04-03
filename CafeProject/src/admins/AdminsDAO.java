@@ -111,6 +111,22 @@ return -1;
 		return null;
 	}
 	
+	public String getCafeProfileImg() {
+		try {
+			String SQL = "select cafeProfileImage from cafe_profile_image where id = 1";
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				String admins = rs.getString(1);
+				
+				return admins;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public String getGateContent() {
 		try {
 			String SQL = "select gateContent from gate_content where id = 1";
