@@ -353,21 +353,23 @@ public class BoardsDAO {
 		}
 		return count; // 총 레코드 수 리턴
 	}
-//	
-//	public int update(int bbsID, String bbsTitle, String bbsContent) {
-//		String SQL = "update BBS set bbsTitle = ?, bbsContent = ? where bbsID = ?";
-//		try {
-//			PreparedStatement pstmt = conn.prepareStatement(SQL);
-//			pstmt.setString(1, bbsTitle);
-//			pstmt.setString(2, bbsContent);	
-//			pstmt.setInt(3, bbsID);
-//			return pstmt.executeUpdate();
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//		return -1;//�����ͺ��̽� ����
-//	}
-//	
+	
+	public int update(int board_id, String subject, String content, int b_id) {
+		String SQL = "update boards set board_id = ?, boardName = ?, subject = ? ,content = ? where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, board_id);
+			pstmt.setString(2, getBoardName(board_id));
+			pstmt.setString(3, subject);
+			pstmt.setString(4, content);
+			pstmt.setInt(5, b_id);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 //	public int delete(int bbsID) {
 //		String SQL = "update BBS set bbsAvailable = 0 where bbsID = ?";
 //		try {

@@ -4,6 +4,9 @@
     <%@ page import="boards.Boards" %>
     <%@ page import="java.util.ArrayList" %>
     <style>
+    .mainTableList{
+    	table-layout:fixed;
+    }
     .mainTableList td{
     	height: 28px;
     	padding-top:6px;
@@ -13,6 +16,17 @@
     .allList{
     	padding-bottom: 8px;
 	border-bottom: 1px solid #777777;
+    }
+    .td_subject{
+    	text-overflow:ellipsis;
+    	overflow:hidden;
+    	white-space:nowrap;
+    }
+    .td_nick{
+    	text-overflow:ellipsis;
+    	overflow:hidden;
+    	width:100px;
+    	white-space:nowrap;
     }
     </style>
         <div class="cafe_intro" id="cafe_intro">

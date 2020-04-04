@@ -136,7 +136,7 @@ if(board_id == null){
 
 			<tr>
 				<td class="td_num"><%= list.get(i).getId()%></td>
-				<td class="td_subject"><a href = "view.jsp?id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
+				<td class="td_subject"><a href = "view.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
 				<td><%= list.get(i).getNick()%></td>
 				<td class="td_date"><%= list.get(i).getUploadDate().substring(0, 10).replace("-", ".")%></td>
 				<td class="td_view"><%= list.get(i).getHit()%></td>

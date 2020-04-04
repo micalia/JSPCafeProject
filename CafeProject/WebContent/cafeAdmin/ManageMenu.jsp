@@ -35,12 +35,12 @@ label{
 <div id="contentBox">
 <form action="insertMenu.jsp" method="post">
     메뉴 추가
-    <input type="text" name="boardName" autocomplete="off" autofocus>
+    <input type="text" name="boardName" autocomplete="off" autofocus maxlength="20">
     <input type="submit" value="추가">
   </form>
 
 메뉴이름 수정 
-    <input type="text" id="changeMenu"style="margin-top:6px;" readonly> => <input type="text" id="changeMenuAction">
+    <input type="text" id="changeMenu"style="margin-top:6px;" readonly maxlength="20"> => <input type="text" id="changeMenuAction" maxlength="20">
     <button class="update">수정</button><br>
 
 <button class="delete" style="margin-top:6px;">선택한 메뉴 삭제</button>

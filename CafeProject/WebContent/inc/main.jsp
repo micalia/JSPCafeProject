@@ -192,6 +192,7 @@ td{
   </head>
   <body>
    <%
+   	
 		String id = null;
 	if (session.getAttribute("id") != null){
 		id = (String) session.getAttribute("id");
