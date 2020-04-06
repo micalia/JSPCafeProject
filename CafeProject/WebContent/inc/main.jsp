@@ -188,6 +188,13 @@ td{
     .topbar{
     	margin:1px 0px;
     }
+    .nickText{
+    	float:right;
+    	text-overflow:ellipsis;
+    	overflow:hidden;
+    	width:112px;
+    	white-space:nowrap;
+    }
 </style>
   </head>
   <body>
@@ -266,11 +273,7 @@ td{
       <%if(session.getAttribute("id") != null){ %>
       <div id="info-data2" style="display:none;">
      <img src="<%=request.getContextPath()%>/img/profile.jpg" class="profileImg">
-     <% if(nick.length()>8){%>
-     <%= nick.substring(0,8) %>..
-    	 <%}else{ %>
-    	 <%=nick %>
-    	 <%} %>
+     <span class="nickText"><%= nick %></span>
     	 <br>
  
        레벨 : <%= level %>

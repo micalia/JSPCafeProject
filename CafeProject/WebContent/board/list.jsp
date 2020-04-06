@@ -3,39 +3,65 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="boards.Boards" %>
 <%@ page import="java.lang.Math" %>
-
+<%@ page import="java.text.SimpleDateFormat" %>
+    <%@ page import="java.util.Date" %>
 <%@ include file="../inc/main.jsp" %>   
 <%
 String board_id = request.getParameter("board_id");
 int count, pageSize, currentPage, startRow, cot;
 ArrayList<Boards> list = null;
+pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
+String pageNum = request.getParameter("page");
+if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
+	pageNum = "1";
+}
 if(board_id == null){
 	count = boardsDAO.getCount(); //전체글수 php_total_article
-	pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
-	String pageNum = request.getParameter("page");
-	if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
-		pageNum = "1";
-	}
 	currentPage = Integer.parseInt(pageNum);
 	startRow = (currentPage - 1) * pageSize;//php_start
 	cot =count-(pageSize*(currentPage-1));
 	if (count > 0) {
 		list = boardsDAO.getList(startRow, pageSize);
+			if(list.size() == 0){
+						currentPage -= 1;
+						if(currentPage > 0) {%>
+						<script>
+						location.href="list.jsp<%if(board_id != null || pageNum != null){ %>?<%}if(board_id != null){ %>board_id=<%=board_id %><%} if(board_id != null && pageNum != null){%>&<%}if(pageNum != null){%>page=<%= currentPage %><%}%>";
+						</script>
+						<%
+						/* startRow = (currentPage - 1) * pageSize;//php_start
+						cot =count-(pageSize*(currentPage-1));
+							if (count > 0) {
+								list = boardsDAO.getList(startRow, pageSize);
+							} */
+						}
+					}
 	}
 
 }else{
 	int boardId = Integer.parseInt(board_id);
 	count = boardsDAO.getCountInMenu(boardId); //전체글수 php_total_article
-	pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
-	String pageNum = request.getParameter("page");
-	if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
-		pageNum = "1";
-	}
+	
 	currentPage = Integer.parseInt(pageNum);
 	startRow = (currentPage - 1) * pageSize;//php_start
 	cot =count-(pageSize*(currentPage-1));
 	if (count > 0) {
 		list = boardsDAO.getListInMenu(boardId, startRow, pageSize);
+		if(list.size() == 0){
+			currentPage -= 1;
+			if(currentPage > 0) {%>
+			<script>
+			location.href="list.jsp<%if(board_id != null || pageNum != null){ %>?<%}if(board_id != null){ %>board_id=<%=board_id %><%} if(board_id != null && pageNum != null){%>&<%}if(pageNum != null){%>page=<%= currentPage %><%}%>";
+			</script>
+			<%
+				
+			/* startRow = (currentPage - 1) * pageSize;//php_start
+			cot =count-(pageSize*(currentPage-1));
+				if (count > 0) {
+					list = boardsDAO.getListInMenu(boardId, startRow, pageSize);
+				} */
+			}
+		}
 	}
 
 }
@@ -130,6 +156,9 @@ if(board_id == null){
 		 <%
 				if (count > 0) { // 데이터베이스에 데이터가 있으면
 					//int number = count - (currentPage - 1) * pageSize; // 글 번호 순번 
+					SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy.MM.dd");
+                   		Date time = new Date();
+                   		String currentTime = timeFormat.format(time);
 					for (int i = 0; i < list.size(); i++) {
 					
 			%>
@@ -138,7 +167,9 @@ if(board_id == null){
 				<td class="td_num"><%= list.get(i).getId()%></td>
 				<td class="td_subject"><a href = "view.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
 				<td><%= list.get(i).getNick()%></td>
-				<td class="td_date"><%= list.get(i).getUploadDate().substring(0, 10).replace("-", ".")%></td>
+				<td class="td_date"><%if(currentTime.equals(list.get(i).getUploadDate().substring(0, 10).replace("-", "."))){%>
+                        <%= list.get(i).getUploadDate().substring(11,16)%>
+                        <%}else{ %><%=list.get(i).getUploadDate().substring(0, 10).replace("-", ".")%><%} %></td>
 				<td class="td_view"><%= list.get(i).getHit()%></td>
 			</tr>
 		<%

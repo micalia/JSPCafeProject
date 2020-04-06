@@ -370,16 +370,16 @@ public class BoardsDAO {
 		return -1;
 	}
 	
-//	public int delete(int bbsID) {
-//		String SQL = "update BBS set bbsAvailable = 0 where bbsID = ?";
-//		try {
-//			PreparedStatement pstmt = conn.prepareStatement(SQL);
-//			pstmt.setInt(1, bbsID);			
-//			return pstmt.executeUpdate();
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//		return -1;//�����ͺ��̽� ����
-//	}
+	public int delete(int b_id) {
+		String SQL = "delete from boards where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, b_id);			
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
 
 }

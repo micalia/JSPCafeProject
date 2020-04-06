@@ -94,10 +94,14 @@
     <%= boards.getContent() %>
     </div>
     </div>
-   <button class="btn btn-sm viewButton" onclick="location.href='list.jsp<%if(board_id != null || request.getParameter("page") != null){ %>?<%}if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(request.getParameter("page") != null){%>&page=<%= request.getParameter("page") %><%}%>'">목록</button>
-    <% if (id.equals(boards.getUser_id())){ %>
+   <button class="btn btn-sm viewButton" onclick="location.href='list.jsp<%if(board_id != null || request.getParameter("page") != null){ %>?<%}if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%= request.getParameter("page") %><%}%>'">목록</button>
+    <%if (id.equals(boards.getUser_id()) || level > 17){//level 18 이상부터 모든 게시물 삭제권한 부여
+    %>
+    	<button class="btn btn-sm viewButton" onclick="if(confirm('게시글을 삭제하시겠습니까?')){location.href='deleteAction.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%=request.getParameter("id") %>';}" style="margin-right:5px;">삭제</button>
+    	<%} %>
+    <% if(id != null){ if (id.equals(boards.getUser_id())){ %>
     <button class="btn btn-sm viewButton" onclick="location.href='update.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %>&<%} %>id=<%= request.getParameter("id") %>'" style="margin-right:5px;">수정</button>
-   <% } %>
+   <% } }%>
     <script>
     var i, frames;
     frames = document.getElementsByTagName("iframe");

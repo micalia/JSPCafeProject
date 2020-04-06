@@ -3,6 +3,8 @@
 <%@ include file="./inc/main.jsp" %>
     <%@ page import="boards.Boards" %>
     <%@ page import="java.util.ArrayList" %>
+    <%@ page import="java.text.SimpleDateFormat" %>
+    <%@ page import="java.util.Date" %>
     <style>
     .mainTableList{
     	table-layout:fixed;
@@ -28,6 +30,9 @@
     	width:100px;
     	white-space:nowrap;
     }
+    .td_date{
+    	text-align:center;
+    }
     </style>
         <div class="cafe_intro" id="cafe_intro">
 <%		String gateContent = adminsDAO.getGateContent();
@@ -49,14 +54,19 @@
                     <col width="80">
                     </colgroup>
                    <%
-                    	
+                    	SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy.MM.dd");
+                   		Date time = new Date();
+                   		String currentTime = timeFormat.format(time);
+                   		
                     	ArrayList<Boards> list = boardsDAO.mainGetList();
                     	for(int i = 0; i < list.size(); i++){
                     %>
                     <tr>
                         <td class="td_subject"><b>·</b>&nbsp;&nbsp;<a class = "subjectcss" href ="./board/view.jsp?id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject() %></a></td>
                         <td class="td_nick"><%= list.get(i).getNick() %></td>
-                        <td class="td_date"><%= list.get(i).getUploadDate().substring(0, 10).replace("-", "/") %></td>
+                        <td class="td_date"><%if(currentTime.equals(list.get(i).getUploadDate().substring(0, 10).replace("-", "."))){%>
+                        <%= list.get(i).getUploadDate().substring(11,16)%>
+                        <%}else{ %><%=list.get(i).getUploadDate().substring(0, 10).replace("-", ".")%><%} %></td>
                         <td class="td_view"><%= list.get(i).getHit() %></td>
                     </tr>
                    <%
