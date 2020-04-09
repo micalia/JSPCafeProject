@@ -38,7 +38,7 @@
 <%		String gateContent = adminsDAO.getGateContent();
 		if(gateContent == null){
 %>
-<img src="<%=request.getContextPath()%>/img/DefaultGateImg.png"style="width:860px; height:290.4px;">
+<img src="<%=request.getContextPath()%>/img/DefaultGateImg.png"style="width:860px;">
 <%}else{ %>
 		<%=gateContent %>
 <%} %>

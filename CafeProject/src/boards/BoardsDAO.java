@@ -382,4 +382,88 @@ public class BoardsDAO {
 		return -1;
 	}
 
+	public int replyInsert(int b_id, int bundle, String reply,  String nick, String id) {
+		String SQL;
+		if(bundle == -1) {
+			SQL = "insert into reply(b_id, bundle, reply, time, nick, user_id) values(?, (select ifnull(max(bundle)+1,1) from reply as rep), ?, ?, ?, ?)";
+		}else {
+			SQL = "insert into reply(b_id, bundle, reply, time, nick, user_id) values(?, ?, ?, ?, ?, ?)";
+		} 
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			if(bundle == -1) {
+				pstmt.setInt(1, b_id);
+				pstmt.setString(2, reply);
+				pstmt.setString(3, getDate());
+				pstmt.setString(4, nick);
+				pstmt.setString(5, id);
+
+			}else {
+				pstmt.setInt(1, b_id);
+				pstmt.setInt(2, bundle);
+				pstmt.setString(3, reply);
+				pstmt.setString(4, getDate());
+				pstmt.setString(5, nick);
+				pstmt.setString(6, id);
+			}
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
+	public ArrayList<Reply> getReply(int b_id) {
+		String sql = "select * from reply where b_id = ? order by if(bundle = 0, num, bundle), num";
+		ArrayList<Reply> list = new ArrayList<Reply>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, b_id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Reply reply = new Reply();
+				reply.setB_id(rs.getInt(1));
+				reply.setBundle(rs.getInt(2));
+				reply.setNum(rs.getInt(3));
+				reply.setReply(rs.getString(4));
+				reply.setTime(rs.getString(5));
+				reply.setNick(rs.getString(6));
+				reply.setUser_id(rs.getString(7));
+				list.add(reply);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public int replyDelete(int reply_num) {
+		String SQL = "delete from reply where num = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, reply_num);			
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }
