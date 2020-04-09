@@ -110,6 +110,18 @@
 .replyDelete:hover{
 	cursor:pointer;
 }
+.replyArrow{
+	width:15px;
+	height:9px;
+	margin-left:8px;
+}
+.replyOfreply{
+	font-size:13px;
+	color:#696969;
+}
+.replyOfreply:hover{
+	cursor:pointer;
+}
 	</style>
 	<div class = "content-border" style="padding:14px;">
 	<div class="subjectBar">
@@ -138,13 +150,12 @@
 
     <div class="replyContainer">
     <ul id="cmt_list">
-    <div class="board-box-line-dashed" style="margin-top:3px;"></div>
     <% ArrayList<Reply> replyList = boardsDAO.getReply(b_id); 
  
     for(int i = 0; i < replyList.size(); i++){
     %>
-    <li class="replyStyle">
-    <b><%= replyList.get(i).getNick()%></b> <span style="color:#595959;"><%= replyList.get(i).getTime().substring(0, 16).replace("-", ".")%></span><span class="replyDelete" onclick="replyDelete(<%= replyList.get(i).getNum()%>)">삭제</span><br>
+    <li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off">
+    <b><%= replyList.get(i).getNick()%></b> <span style="color:#595959;"><%= replyList.get(i).getTime().substring(0, 16).replace("-", ".")%></span><img src="<%=request.getContextPath()%>/img/replyArrow.png" class="replyArrow"><span class="replyOfreply" onclick="replyOfreply(<%= replyList.get(i).getNum()%>)">답글</span><span class="replyDelete" onclick="replyDelete(<%= replyList.get(i).getNum()%>)">삭제</span><br>
      <%= replyList.get(i).getReply()%>
      </li>
     <div class="board-box-line-dashed" style="margin-top:3px;"></div>
@@ -168,10 +179,10 @@
 	                               'reply':reply
 	                           },
 	                       success: function (data) {
+	                    	   document.getElementById("message").value='';	                    	   
 	                    		   $("#cmt_list").empty();
-	                    		   $("#cmt_list").append("<div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 	                    	   for(var i=0; i<data.jreply.length; i++){
-	                    		   $("#cmt_list").append("<li class='replyStyle'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+	                    		   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 	                    	   }
 	                       },
 	                       error: function (data) {
@@ -224,9 +235,8 @@
                         },
                     success: function (data) {
                     	$("#cmt_list").empty();
-                    	$("#cmt_list").append("<div class='board-box-line-dashed' style='margin-top:3px;'></div>");
                  	   for(var i=0; i<data.jreply.length; i++){
-                 		  $("#cmt_list").append("<li class='replyStyle'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+                 		  $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
                  	   }
                     },
                     error: function (data) {
@@ -234,6 +244,17 @@
                     }
                 }); 
     }
+   
+   function replyOfreply(num){
+	   var confirm = "#replyNum_" + num;
+	   var data_confirm = $(confirm).attr("data-replyText");
+	   if (data_confirm == "off"){
+		   var b = $(confirm).attr("data-replyText","on");
+	   }else{
+		   var b = $(confirm).attr("data-replyText","off"); 
+	   }
+	   //$("<div class='board-box-line-dashed' style='margin-top:3px;'></div><li class='replyStyle'>하이</li>").insertAfter(num);
+   }
     </script>
     
     
