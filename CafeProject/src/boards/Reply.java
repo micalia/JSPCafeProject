@@ -8,6 +8,8 @@ public class Reply {
 	private String time;
 	private String nick;
 	private String user_id;
+	private String rec_nick;
+	private String rec_user_id;
 	
 	public int getB_id() {
 		return b_id;
@@ -51,6 +53,17 @@ public class Reply {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-
+	public String getRec_nick() {
+		return rec_nick;
+	}
+	public void setRec_nick(String rec_nick) {
+		this.rec_nick = rec_nick;
+	}
+	public String getRec_user_id() {
+		return rec_user_id;
+	}
+	public void setRec_user_id(String rec_user_id) {
+		this.rec_user_id = rec_user_id;
+	}
 	
 }

@@ -40,6 +40,8 @@ if(result == -1){
         data.put("time", replyList.get(i).getTime().substring(0, 16).replace("-", "."));
         data.put("nick", replyList.get(i).getNick());
         data.put("user_id", replyList.get(i).getUser_id());
+        data.put("rec_nick", replyList.get(i).getRec_nick());
+        data.put("rec_id", replyList.get(i).getRec_user_id());
         jArray.add(i, data);
     }
 	json.put("jreply", jArray);

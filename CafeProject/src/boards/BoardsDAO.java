@@ -382,13 +382,15 @@ public class BoardsDAO {
 		return -1;
 	}
 
-	public int replyInsert(int b_id, int bundle, String reply,  String nick, String id) {
+	public int replyInsert(int b_id, int bundle, String reply,  String nick, String id, String rec_nick, String rec_id) {
 		String SQL;
 		if(bundle == -1) {
 			SQL = "insert into reply(b_id, bundle, reply, time, nick, user_id) values(?, (select ifnull(max(bundle)+1,1) from reply as rep), ?, ?, ?, ?)";
-		}else {
+		}else if(rec_id != null){
+			SQL = "insert into reply(b_id, bundle, reply, time, nick, user_id, rec_nick, rec_user_id) values(?, ?, ?, ?, ?, ?, ?, ?)";
+		}else {		
 			SQL = "insert into reply(b_id, bundle, reply, time, nick, user_id) values(?, ?, ?, ?, ?, ?)";
-		} 
+		}
 		try {
 			pstmt = conn.prepareStatement(SQL);
 			if(bundle == -1) {
@@ -398,6 +400,15 @@ public class BoardsDAO {
 				pstmt.setString(4, nick);
 				pstmt.setString(5, id);
 
+			}else if(rec_id != null){
+				pstmt.setInt(1, b_id);
+				pstmt.setInt(2, bundle);
+				pstmt.setString(3, reply);
+				pstmt.setString(4, getDate());
+				pstmt.setString(5, nick);
+				pstmt.setString(6, id);
+				pstmt.setString(7, rec_nick);
+				pstmt.setString(8, rec_id);
 			}else {
 				pstmt.setInt(1, b_id);
 				pstmt.setInt(2, bundle);
@@ -438,6 +449,8 @@ public class BoardsDAO {
 				reply.setTime(rs.getString(5));
 				reply.setNick(rs.getString(6));
 				reply.setUser_id(rs.getString(7));
+				reply.setRec_nick(rs.getString(8));
+				reply.setRec_user_id(rs.getString(9));
 				list.add(reply);
 			}
 		} catch (Exception e) {
