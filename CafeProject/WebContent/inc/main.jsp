@@ -131,9 +131,7 @@ td{
 .subjectcss:hover{
     color:black;
 }
-.content-border{
-    border:1px solid black;
-}
+
 .footer{
         margin-top:60px;
         border-top-color:black;

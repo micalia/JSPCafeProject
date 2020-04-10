@@ -46,6 +46,7 @@
 		border-radius: 0px; 
 		border:1px solid #a8a8a8;
 		float:right;
+		background-color:white;
 	}
 	.submitReplyBtn{
 		padding: 22px 29px;
@@ -75,11 +76,11 @@
 		width:100%;
 	}
 	.replyContainer{
-		width:100%;
-		border-left:1px solid black;
-		border-right:1px solid black;
-		border-bottom:1px solid black;
-		padding:11px 26px 16px 24px;
+		width:97%;
+		margin:0 auto;
+		padding:11px 24px 16px 22px;
+		background-color:#f9f9f9;
+		margin-bottom:12px;
 	}
 	#comment_text{
     line-height: 14px;
@@ -123,6 +124,7 @@
 	cursor:pointer;
 }
 	</style>
+	<div class="contentContainer" style="border:1px solid black;">
 	<div class = "content-border" style="padding:14px;">
 	<div class="subjectBar">
 	<div class="subjectBox">
@@ -151,24 +153,39 @@
     <div class="replyContainer">
     <ul id="cmt_list">
     <% ArrayList<Reply> replyList = boardsDAO.getReply(b_id); 
- 
+ 	
+    	int a = -1;
+    	int b = -1;
     for(int i = 0; i < replyList.size(); i++){
+    	if(i%2 == 0){
+    		a = replyList.get(i).getBundle();
+    	}else{
+    		b = replyList.get(i).getBundle();
+    	}
+    	 if(a == b){%>
+    	 <span style='color:#ff630f;margin-left:13px;float:left'><b>┖</b></span>
+    		<li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off" style='float:right;width:742px;'>
+		    <b><%= replyList.get(i).getNick()%></b> <span style="color:#595959;"><%= replyList.get(i).getTime().substring(0, 16).replace("-", ".")%></span><img src="<%=request.getContextPath()%>/img/replyArrow.png" class="replyArrow"><span class="replyOfreply" id="rereply_<%= replyList.get(i).getNum()%>"onclick="replyOfreply(<%= replyList.get(i).getNum()%>, <%= replyList.get(i).getBundle()%>)">답글</span><span class="replyDelete" onclick="replyDelete(<%= replyList.get(i).getNum()%>)">삭제</span><br>
+		     <%= replyList.get(i).getReply()%>
+		     </li>
+    	<%}else{%>
+		    <li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off">
+		    <b><%= replyList.get(i).getNick()%></b> <span style="color:#595959;"><%= replyList.get(i).getTime().substring(0, 16).replace("-", ".")%></span><img src="<%=request.getContextPath()%>/img/replyArrow.png" class="replyArrow"><span class="replyOfreply" id="rereply_<%= replyList.get(i).getNum()%>"onclick="replyOfreply(<%= replyList.get(i).getNum()%>, <%= replyList.get(i).getBundle()%>)">답글</span><span class="replyDelete" onclick="replyDelete(<%= replyList.get(i).getNum()%>)">삭제</span><br>
+		     <%= replyList.get(i).getReply()%>
+		     </li>
+    	<%} 
     %>
-    <li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off">
-    <b><%= replyList.get(i).getNick()%></b> <span style="color:#595959;"><%= replyList.get(i).getTime().substring(0, 16).replace("-", ".")%></span><img src="<%=request.getContextPath()%>/img/replyArrow.png" class="replyArrow"><span class="replyOfreply" onclick="replyOfreply(<%= replyList.get(i).getNum()%>)">답글</span><span class="replyDelete" onclick="replyDelete(<%= replyList.get(i).getNum()%>)">삭제</span><br>
-     <%= replyList.get(i).getReply()%>
-     </li>
     <div class="board-box-line-dashed" style="margin-top:3px;"></div>
     <%} %>
     </ul>
     <table>
     <tr>
-	    <td style="width:706px;">
+	    <td style="width:706px;padding-right:0px;">
 			    <div id="contact-form" >
 			   <textarea rows="1" id="message" class="form-control" style="height:62.8px;"spellcheck="false"></textarea>
 				</div>
 		</td>
-	    <td style="padding-bottom:15px;vertical-align:bottom;">
+	    <td style="padding-bottom:15px;vertical-align:bottom;padding-right:0px;">
 	    <script>
 	   function replySubmit(){
 	         var reply=$("#message").val();
@@ -181,20 +198,95 @@
 	                       success: function (data) {
 	                    	   document.getElementById("message").value='';	                    	   
 	                    		   $("#cmt_list").empty();
-	                    	   for(var i=0; i<data.jreply.length; i++){
-	                    		   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
-	                    	   }
+	                    		   var a, b;
+		                    	   for(var i=0; i<data.jreply.length; i++){
+		                    		 if(i%2 == 0){
+		                    			 a = data.jreply[i].bundle;
+		                    		 }else{
+		                    			 b = data.jreply[i].bundle;
+		                    		 }
+		                    		 
+	 									if(a == b){
+	 										$("#cmt_list").append("<span style='color:#ff630f;margin-left:13px;float:left'><b>┖</b></span><li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style='float:right;width:742px;'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+		                    		   }else{
+		                    		   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+		                    		   }
+	                    		   }
 	                       },
 	                       error: function (data) {
 	                           alert(data.responseText);
 	                       }
 	                   });
 	       }
+	   
+	   function rereplySubmit(){
+	        var rereply=$("#rerepleText").val();
+	        var bundleData=$("#bundleData").val();
+	           $.ajax({
+	                       url: "replyInsertAction.jsp?b_id=<%=b_id%>",
+	                       type: 'GET',
+	                       data: {
+	                               'rereply':rereply,
+	                               'bundleData' :bundleData
+	                           },
+	                       success: function (data) {
+	                    	   document.getElementById("message").value='';	                    	   
+	                    		   $("#cmt_list").empty();
+	                    		   var a, b;
+	                    	   for(var i=0; i<data.jreply.length; i++){
+	                    		 if(i%2 == 0){
+	                    			 a = data.jreply[i].bundle;
+	                    		 }else{
+	                    			 b = data.jreply[i].bundle;
+	                    		 }
+	                    		 
+ 									if(a == b){
+ 										$("#cmt_list").append("<span style='color:#ff630f;margin-left:13px;float:left'><b>┖</b></span><li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style='float:right;width:742px;'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+	                    		   }else{
+	                    		   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+	                    		   }
+                    		   }
+	                       },
+	                       error: function (data) {
+	                           alert(data.responseText);
+	                       }
+	                   }); 
+	       }
+	   
+	   function replyOfreply(num, bundle){
+		  var confirm = "#replyNum_" + num;
+		  var rereplyNum = "rereply_" + num;
+		   //alert(confirm);
+		   //alert(document.getElementById('replyNum_29').dataset.replyText);
+		   var data_confirm = $(confirm).attr("data-replyText");
+		   //$('.replyStyle').find('.replyOfreply').text("할로");
+		    if (data_confirm == "off"){
+			  
+			   $('.replyStyle').each(function(index, item){
+				 if($(item).attr("data-replyText") == "on"){
+					 $(item).attr("data-replyText", "off");
+					 $(item).find('.replyOfreply').text("답글");
+					$('#replyBox').remove();
+				 }
+			  });
+			   $(confirm).attr("data-replyText","on");
+			   document.getElementById(rereplyNum).innerHTML = "답글취소";
+		   $("<div id='replyBox'><div class='board-box-line-dashed' style='margin-top:3px;'></div><li class='replyStyle'><table><tr><td style='width:697px;padding-right:0px;'><div id='contact-form'><span style='color:#ff630f;margin-left:13px;'><b>┖</b></span> \n" +
+		   "<textarea rows='1' id='rerepleText' class='form-control' style='height:62.8px;float:right;width:650px;' spellcheck='false'></textarea></div></td>\n" +
+		   "<td style='padding-bottom:15px;vertical-align:bottom;padding-right:0px;'><input type='hidden' id='bundleData' value='" + bundle + "'><input type='button' class='btn btn-sm viewButton submitReplyBtn' onclick='rereplySubmit()' value='등록'></td></tr></table>"+
+		   "</li></div>").insertAfter(confirm);
+		   }else{
+			   $(confirm).attr("data-replyText","off");
+			   document.getElementById(rereplyNum).innerHTML = "답글";
+			   $('#replyBox').remove();
+		   }  
+	   }
    </script>
 	    	<input type="button" class="btn btn-sm viewButton submitReplyBtn" onclick="replySubmit()" value="등록">
 	    </td>
     </tr>
     </table>
+    </div>
     </div>
    <button class="btn btn-sm viewButton" onclick="location.href='list.jsp<%if(board_id != null || request.getParameter("page") != null){ %>?<%}if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%= request.getParameter("page") %><%}%>'">목록</button>
     <%if (id.equals(boards.getUser_id()) || level > 17){//level 18 이상부터 모든 게시물 삭제권한 부여
@@ -235,9 +327,20 @@
                         },
                     success: function (data) {
                     	$("#cmt_list").empty();
+                    	var a, b;
                  	   for(var i=0; i<data.jreply.length; i++){
-                 		  $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
-                 	   }
+                 		 if(i%2 == 0){
+                 			 a = data.jreply[i].bundle;
+                 		 }else{
+                 			 b = data.jreply[i].bundle;
+                 		 }
+                 		 
+								if(a == b){
+									$("#cmt_list").append("<span style='color:#ff630f;margin-left:13px;float:left'><b>┖</b></span><li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style='float:right;width:742px;'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+                 		   }else{
+                 		   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='replyDelete' onclick='replyDelete(" + data.jreply[i].num + ")'>삭제</span><br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+                 		   }
+             		   }
                     },
                     error: function (data) {
                         alert(data.responseText);
@@ -245,16 +348,7 @@
                 }); 
     }
    
-   function replyOfreply(num){
-	   var confirm = "#replyNum_" + num;
-	   var data_confirm = $(confirm).attr("data-replyText");
-	   if (data_confirm == "off"){
-		   var b = $(confirm).attr("data-replyText","on");
-	   }else{
-		   var b = $(confirm).attr("data-replyText","off"); 
-	   }
-	   //$("<div class='board-box-line-dashed' style='margin-top:3px;'></div><li class='replyStyle'>하이</li>").insertAfter(num);
-   }
+  
     </script>
     
     
