@@ -479,4 +479,106 @@ public class BoardsDAO {
 		}
 		return -1;
 	}
+	
+	public int getBundleCount(int bundle){
+		int count = 0;
+		String sql = "select count(*) from reply where bundle = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bundle);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+	
+	public int getBundleHost(int bundle){
+		int hostNum = 0;
+		String sql = "select min(num) from reply where bundle = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bundle);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				hostNum = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return hostNum; 
+	}
+	
+	public int deleteTextUpdate(int reply_num) {
+		String SQL = "update reply set reply = 'none', nick = 'none', user_id = 'none', rec_nick = 'none', rec_user_id = 'none' where num = ?";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, reply_num);
+
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+
+	public Reply getHostUserIdChk(int bundle) {
+		String SQL = "select min(num), user_id from reply where bundle = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, bundle);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Reply reply = new Reply();
+				reply.setNum(rs.getInt(1));
+				reply.setUser_id(rs.getString(2));
+				return reply;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public int deleteBundle(int bundle) {
+		String SQL = "delete from reply where bundle = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, bundle);			
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }

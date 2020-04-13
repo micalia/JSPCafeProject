@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../inc/main.jsp" %>
-
 <link href="<%=request.getContextPath()%>/summernote/summernote-bs4.min.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/summernote/summernote-bs4.min.js"></script>
 <script src="<%=request.getContextPath()%>/summernote/lang/summernote-ko-KR.js"></script>
