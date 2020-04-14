@@ -16,6 +16,10 @@ String nick = null;
 if (session.getAttribute("nick") != null){
 	nick = (String) session.getAttribute("nick");
 }
+int level = 1;
+if (session.getAttribute("level") != null){
+	level = (int) session.getAttribute("level");
+}
 int b_id = Integer.parseInt(request.getParameter("b_id"));
 int reply_num = Integer.parseInt(request.getParameter("reply_num"));
 int bundle = -1;
@@ -23,26 +27,27 @@ int result = -1;
 if(request.getParameter("bundle") != null){
 bundle = Integer.parseInt(request.getParameter("bundle"));
 }
-  BoardsDAO boardsDAO = new BoardsDAO();
-int bundleChk = boardsDAO.getBundleCount(bundle);
-if(bundleChk > 1){//같은이름의 번들이 여러개라면
-	int bundleHost = boardsDAO.getBundleHost(bundle);
-	if(bundleHost == reply_num){//번들 호스트라면 '삭제된댓글'로 업데이트
-		result = boardsDAO.deleteTextUpdate(reply_num);
-		System.out.println("1");
-	}else{
-		if(boardsDAO.getBundleCount(bundle) == 2 && boardsDAO.getHostUserIdChk(bundle).getUser_id().equals("none")){
-			result = boardsDAO.deleteBundle(bundle);
-			System.out.println("2");
-		}else{	
-     		result = boardsDAO.replyDelete(reply_num);
-     		System.out.println("3");
+
+	  BoardsDAO boardsDAO = new BoardsDAO();
+if(id != null){
+	int bundleChk = boardsDAO.getBundleCount(bundle);
+	if(bundleChk > 1){//같은이름의 번들이 여러개라면
+		int bundleHost = boardsDAO.getBundleHost(bundle);
+		if(bundleHost == reply_num){//번들 호스트라면 '삭제된댓글'로 업데이트
+			result = boardsDAO.deleteTextUpdate(reply_num);
+		}else{
+			if(boardsDAO.getBundleCount(bundle) == 2 && boardsDAO.getHostUserIdChk(bundle).getUser_id().equals("none")){
+				result = boardsDAO.deleteBundle(bundle);
+			}else{	
+	     		result = boardsDAO.replyDelete(reply_num);
+			}
+			
 		}
-		
+	}else{
+		result = boardsDAO.replyDelete(reply_num);
 	}
 }else{
-	result = boardsDAO.replyDelete(reply_num);
-	System.out.println("4");
+	result = -1;
 }
 if(result == -1){
 	JSONObject json = new JSONObject();
@@ -63,6 +68,11 @@ if(result == -1){
         data.put("time", replyList.get(i).getTime().substring(0, 16).replace("-", "."));
         data.put("nick", replyList.get(i).getNick());
         data.put("user_id", replyList.get(i).getUser_id());
+        if(id.equals(replyList.get(i).getUser_id()) || level>17){
+        	data.put("deleteAction", "<span class='replyDelete' onclick='if(confirm(\"답글을 삭제하시겠습니까?\")){replyDelete(" + replyList.get(i).getNum() + "," + replyList.get(i).getBundle() + ");}'>삭제</span>");
+        }else{
+        	data.put("deleteAction","");
+        }
         data.put("rec_nick", replyList.get(i).getRec_nick());
         data.put("rec_id", replyList.get(i).getRec_user_id());
         jArray.add(i, data);

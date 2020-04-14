@@ -16,7 +16,10 @@ String nick = null;
 if (session.getAttribute("nick") != null){
 	nick = (String) session.getAttribute("nick");
 }
-
+int level = 1;
+if (session.getAttribute("level") != null){
+	level = (int) session.getAttribute("level");
+}
 int b_id = Integer.parseInt(request.getParameter("b_id"));
 String reply = request.getParameter("reply");
 String getBundle = request.getParameter("bundleData");
@@ -48,6 +51,11 @@ if(result == -1){
         data.put("time", replyList.get(i).getTime().substring(0, 16).replace("-", "."));
         data.put("nick", replyList.get(i).getNick());
         data.put("user_id", replyList.get(i).getUser_id());
+        if(id.equals(replyList.get(i).getUser_id()) || level>17){
+        	data.put("deleteAction", "<span class='replyDelete' onclick='if(confirm(\"답글을 삭제하시겠습니까?\")){replyDelete(" + replyList.get(i).getNum() + "," + replyList.get(i).getBundle() + ");}'>삭제</span>");
+        }else{
+        	data.put("deleteAction","");
+        }
         data.put("rec_nick", replyList.get(i).getRec_nick());
         data.put("rec_id", replyList.get(i).getRec_user_id());
         jArray.add(i, data);

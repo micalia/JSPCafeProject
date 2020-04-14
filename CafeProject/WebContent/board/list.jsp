@@ -133,8 +133,25 @@ if(board_id == null){
     padding: 100px 0;
     text-align: center;
 }
+.boardName{
+	font-size:22px;
+	margin-bottom:17px;
+}
 </style>
 <div class = "article-board">
+<% 
+if(request.getParameter("board_id") == null){%>
+	<h3 class="boardName"><b>전체글보기</b></h3>
+<%}else{
+if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) == null){%>
+	 <script>
+	 alert("카페 운영진이 삭제했거나 없는 게시판입니다.");
+	 history.back();
+	 </script>
+<%}else{%>
+<h3 class="boardName"><b><%= boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) %></b></h3>
+<%}
+}%>
 <table>
 <colgroup>
 <col style="width:88px;">
