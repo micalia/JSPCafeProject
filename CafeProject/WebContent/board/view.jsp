@@ -125,6 +125,9 @@
 .replyOfreply:hover{
 	cursor:pointer;
 }
+    .deleteText{
+    	margin:7px 0px 2px 0px;
+    }
 	</style>
 	<div class="contentContainer" style="border:1px solid black;">
 	<div class = "content-border" style="padding:14px;">
@@ -183,7 +186,7 @@
     	 
     	<%}else{
     			if(replyList.get(i).getUser_id().equals("none")){%>
-    			<li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off">삭제된 댓글입니다.</li>
+    			<li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off"><div class="deleteText">삭제된 댓글입니다.</div></li>
     			
     			<%}else{%>
     				<li class="replyStyle" id="replyNum_<%= replyList.get(i).getNum()%>" data-replyText="off">
@@ -226,7 +229,7 @@
 										}
 	            		   }else{
 	            			   if(data.jreply[i].user_id == 'none'){
-	            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''>삭제된 댓글입니다.</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+	            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><div class='deleteText'>삭제된 댓글입니다.</div></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 	            			   }else{
 	            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span>"+ data.jreply[i].deleteAction +"<br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 	            				   
@@ -286,7 +289,7 @@
 														}
 					            		   }else{
 					            			   if(data.jreply[i].user_id == 'none'){
-					            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''>삭제된 댓글입니다.</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+					            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><div class='deleteText'>삭제된 댓글입니다.</div></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 					            			   }else{
 					            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span>"+ data.jreply[i].deleteAction +"<br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 					            				   
@@ -338,7 +341,7 @@
 													}
 				            		   }else{
 				            			   if(data.jreply[i].user_id == 'none'){
-				            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''>삭제된 댓글입니다.</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+				            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><div class='deleteText'>삭제된 댓글입니다.</div></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 				            			   }else{
 				            				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'style=''><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span>"+ data.jreply[i].deleteAction +"<br>" + data.jreply[i].reply + "</li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
 				            				   

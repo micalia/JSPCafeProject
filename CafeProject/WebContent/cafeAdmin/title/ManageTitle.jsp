@@ -46,6 +46,10 @@ input[type=range]{
 .croppie-container .cr-slider-wrap{
 	margin:15px 0px;
 }
+  .container {
+  width: 1170px;
+  max-width: none !important;
+}  
 </style>
 <center style="margin-top:42px;">
     <a href="<%=request.getContextPath()%>/home.jsp">
@@ -77,7 +81,7 @@ input[type=range]{
       		</div>
       		<div class="modal-body">
         		<div class="row">
-  					<div class="col-md-8 text-center" style="padding-left:30px;">
+  					<div class="col-xs-8 text-center" style="padding-left:30px;">
 						  <div id="image_demo" style="width:350px; margin-top:30px"></div>
 						  <button class="btn btn-success crop_image"style="margin-top:5px;margin-left:331px;">이미지 업로드</button>
   					</div>
@@ -92,6 +96,8 @@ input[type=range]{
     </div>
 </div>
 						 <center><button class="btn btn-success" id="dataSubmit">바로적용</button> 
+						 &nbsp;&nbsp;
+						 <button class="btn btn-danger" onclick="titleImgRemove()">현재 타이틀 이미지 제거</button></center>
 				  	
 
 <script>  
@@ -164,7 +170,25 @@ $(document).ready(function(){
                   }
               });
   });
+  
+  
 });  
+  function titleImgRemove(){
+      $.ajax({
+                  url: "titleImgRemove.jsp",
+                  type: 'post',
+                  success: function (data) {
+                      if (data['status']==true) {
+                          alert(data['message']);
+                      } else {
+                          alert('오류가 발생했습니다');
+                      }
+                  },
+                  error: function (data) {
+                      alert(data.responseText);
+                  }
+              });
+  }
 </script>
 </body>
 </html>

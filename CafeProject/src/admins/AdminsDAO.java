@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import boards.Board_ids;
+
 public class AdminsDAO {
 
 		private Connection conn;
@@ -111,6 +113,48 @@ return -1;
 		return null;
 	}
 	
+	public int deleteTitleImg() {
+		String SQL = "delete from title_image where id = 1";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
+	public int deleteCafeProfileImg() {
+		String SQL = "delete from cafe_profile_image where id = 1";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
 	public String getCafeProfileImg() {
 		try {
 			String SQL = "select cafeProfileImage from cafe_profile_image where id = 1";
@@ -141,6 +185,27 @@ return -1;
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int deleteGateContent() {
+		String SQL = "delete from gate_content where id = 1";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
 	}
 	
 	public int getCount(){

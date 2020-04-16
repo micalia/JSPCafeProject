@@ -39,6 +39,7 @@ if(result == -1){
 	response.setContentType("application/json");
 	out.print(json.toJSONString());
 }else{
+	boardsDAO.replyUpCount(b_id);
 	JSONArray jArray = new JSONArray();
 	JSONObject json= new JSONObject();
 	ArrayList<Reply> replyList = boardsDAO.getReply(b_id); 

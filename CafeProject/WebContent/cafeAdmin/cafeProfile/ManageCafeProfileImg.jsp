@@ -90,7 +90,10 @@ input[type=range]{
     	</div>
     </div>
 </div>
-						 <center><button class="btn btn-success" id="dataSubmit">바로적용</button> 
+						 <center>
+						 <button class="btn btn-success" id="dataSubmit">바로적용</button>&nbsp;&nbsp;
+						 <button class="btn btn-danger" onclick="cafeProfileImgRemove()">현재 카페프로필 이미지 제거</button>
+						 </center>
 				  	
 
 <script>  
@@ -163,7 +166,23 @@ $(document).ready(function(){
                   }
               });
   });
-});  
+});
+function cafeProfileImgRemove(){
+    $.ajax({
+                url: "cafeProfileImgRemove.jsp",
+                type: 'post',
+                success: function (data) {
+                    if (data['status']==true) {
+                        alert(data['message']);
+                    } else {
+                        alert('오류가 발생했습니다');
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+}
 </script>
 </body>
 </html>

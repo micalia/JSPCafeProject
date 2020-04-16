@@ -12,6 +12,7 @@ public class Boards {
 	private String uploadDate;
 	private int hit;
 	private int likeCount;
+	private int replyCount;
 	
 	public int getId() {
 		return id;
@@ -73,5 +74,10 @@ public class Boards {
 	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
 	}
-	
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
 }

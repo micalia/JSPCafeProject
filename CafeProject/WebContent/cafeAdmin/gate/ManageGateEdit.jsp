@@ -71,8 +71,13 @@ $('#writeForm').show();
     <form name="writeForm" id="writeForm" style="display:none;" onsubmit="return boardCheck()" method="post">
  
 <textarea id="gateContent" class="summernote"></textarea>
-<center><button id="dataSubmit"class="btn btn-link btn-sm" style ="margin-top:13px;padding: 7px 14px;color: black; border-radius: 0px; border:1px solid #a8a8a8 !important;">확인</button></center>
+<center>
+<button id="dataSubmit"class="btn btn-link btn-sm" style ="margin-top:13px;padding: 7px 14px;color: black; border-radius: 0px; border:1px solid #a8a8a8 !important;">확인</button>
+&nbsp;&nbsp;
+</center>
 </form>
+
+<center><button class="btn btn-danger" onclick="if(confirm('기존 카페대문을 삭제하시겠습니까?')){gateContentRemove();}" style="margin-top:20px;border-radius:0px;">현재 카페대문 제거</button></center>
 </div>
 <script>
  function sendFile(file,editor,welEditable) {
@@ -130,6 +135,23 @@ $(document).ready(function(){
 	            });
 	});
 });  
+
+function gateContentRemove(){
+    $.ajax({
+                url: "gateContentRemove.jsp",
+                type: 'post',
+                success: function (data) {
+                    if (data['status']==true) {
+                        alert(data['message']);
+                    } else {
+                        alert('오류가 발생했습니다');
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+}
 </script>
 </body>
 </html>

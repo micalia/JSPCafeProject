@@ -20,7 +20,6 @@ File Folder = new File(uploadPath);
 if(!Folder.exists()) {
 	try{
 	    Folder.mkdir(); //폴더 생성합니다.
-	    System.out.println("폴더가 생성되었습니다.");
         } 
         catch(Exception e){
 	    e.getStackTrace();

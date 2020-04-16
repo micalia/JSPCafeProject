@@ -59,7 +59,7 @@
                   <div class="cols-sm-10">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                      <input type="password" value = "asdfasdf"class="form-control" name="password" id="pswd1"maxlength="25" />
+                      <input type="password" class="form-control" name="password" id="pswd1"maxlength="25" />
                     </div>
                     <span class="error_next_box" id="pswd1Msg" style="display:none;" aria-live="assertive"></span>
                   </div>
@@ -70,7 +70,7 @@
                   <div class="cols-sm-10">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                      <input type="password" value = "asdfasdf"class="form-control"id="pswd2"maxlength="25"/>
+                      <input type="password" class="form-control"id="pswd2"maxlength="25"/>
                     </div>
                     <span class="error_next_box" id="pswd2Msg" style="display:none;" aria-live="assertive"></span>
                   </div>
@@ -93,13 +93,13 @@
 
                     <div class="input-group yy" style="margin-right:0px;">
                       <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                      <input type="text" value = "1977" class="form-control" name="year" id="yy"style="width:100%;" placeholder="년(4자)" maxlength="4"/>
+                      <input type="text" class="form-control" name="year" id="yy"style="width:100%;" placeholder="년(4자)" maxlength="4"/>
                     </div>
 
                   <div class="col-sm-4 mm">
                     <select id="mm" name="month" class="selectpicker form-control"aria-label="월"style="width:100%; padding-left:9.5px!important;padding-right:9.5px;!important">
                       <option value="">월</option>
-                      <option value="1" selected>1</option>
+                      <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
@@ -115,7 +115,7 @@
                   </div>
                   <div class="input-group dd" style="margin-right:0px;">
                     <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                    <input type="text" class="form-control" value = "3" name="date" id="dd"style="width:100%;" maxlength="2" placeholder="일"/>
+                    <input type="text" class="form-control" name="date" id="dd"style="width:100%;" maxlength="2" placeholder="일"/>
                   </div>
                 </div>
                 <span class="error_next_box" id="birthdayMsg" style="display:none;" aria-live="assertive"></span>
@@ -127,7 +127,7 @@
                   <select id="gender" name="gender"class="selectpicker form-control">
                     <option value="" >성별</option>
                     <option value="b">남자</option>
-                    <option value="g" selected>여자</option>
+                    <option value="g">여자</option>
                   </select>
                 </div>
                 <span class="error_next_box" id="genderMsg" style="display:none;" aria-live="assertive"></span>
@@ -157,7 +157,7 @@
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
                         <!-- <form> -->
-                      <input type="text" class="form-control" value ="01011111111"name="phone" id="phoneNo"autocomplete="off"/>
+                      <input type="text" class="form-control" name="phone" id="phoneNo"autocomplete="off"/>
                       <div id="recaptcha-container"></div>
                       <button type="button" id="btnSend" class="btn btn-primary" style="border-radius: 0;">인증번호받기</button>
                       <!-- </form> -->
@@ -172,7 +172,7 @@
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
                           <!-- <form> -->
-                            <input type="text" class="form-control" id="verificationCode" value = "187200" placeholder="인증번호를 입력하세요" autocomplete="off" disabled>
+                            <input type="text" class="form-control" id="verificationCode" placeholder="인증번호를 입력하세요" autocomplete="off" disabled>
                             <!-- <button type="button" onclick="codeverify()">입력</button> -->
                           <!-- </form> -->
                       </div>

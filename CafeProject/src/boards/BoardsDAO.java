@@ -159,7 +159,7 @@ public class BoardsDAO {
 	}
 	
 	public ArrayList<Boards> mainGetList() {
-		String SQL = "select id, subject, nick, uploadDate, hit from boards order by id desc limit 20";
+		String SQL = "select id, subject, nick, uploadDate, hit, replyCount from boards order by id desc limit 20";
 		ArrayList<Boards> list = new ArrayList<Boards>();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -172,6 +172,7 @@ public class BoardsDAO {
 				boards.setNick(rs.getString(3));
 				boards.setUploadDate(rs.getString(4));
 				boards.setHit(rs.getInt(5));
+				boards.setReplyCount(rs.getInt(6));
 				list.add(boards);
 			}
 
@@ -202,14 +203,30 @@ public class BoardsDAO {
 		return menuList;
 	}
 
-	/*
-	 * public boolean nextPage(int pageNumber) { String SQL =
-	 * "select * from boards where id < ?"; try { PreparedStatement pstmt =
-	 * conn.prepareStatement(SQL); pstmt.setInt(1, getNext() - (pageNumber - 1) *
-	 * 14); rs = pstmt.executeQuery(); if (rs.next()) { return true; } } catch
-	 * (Exception e) { e.printStackTrace(); } return false; }
-	 */
-
+	public int replyUpCount(int id) {
+		String SQL = "update boards set replyCount = replyCount + 1 where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, id);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int replyDownCount(int id) {
+		String SQL = "update boards set replyCount = replyCount - 1 where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, id);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 	public int hitUp(int id) {
 		String SQL = "update boards set hit = hit + 1 where id = ?";
 		try {
