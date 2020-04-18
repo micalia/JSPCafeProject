@@ -74,6 +74,11 @@ if(result == -1){
         }else{
         	data.put("deleteAction","");
         }
+        if(id.equals(replyList.get(i).getUser_id())){
+        	data.put("modifyAction", "<span class='replyModify'>&nbsp;|&nbsp;</span><span class='replyModify' onclick='replyModify(" + replyList.get(i).getNum() + ")'>수정</span>");
+        }else{
+        	data.put("modifyAction","");
+        }
         data.put("rec_nick", replyList.get(i).getRec_nick());
         data.put("rec_id", replyList.get(i).getRec_user_id());
         jArray.add(i, data);
