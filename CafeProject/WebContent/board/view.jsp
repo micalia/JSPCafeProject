@@ -173,7 +173,7 @@
     </div>
     </div>
 
-    <div class="replyContainer">
+    <div class="replyContainer" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
     <ul id="cmt_list">
     <% ArrayList<Reply> replyList = boardsDAO.getReply(b_id); 
  	
@@ -418,7 +418,63 @@
 	                   }); 
 	       }
 	   
+	   function replyUpdate(){
+	         var reply=$("#messageUpdate").val();
+	         var replyNum = document.getElementById("replyNum").value;
+	         if(reply == ""){
+	        	 alert("내용을 입력해주세요");
+	        	 document.getElementById("messageUpdate").focus();
+	        	 return false;
+	         }
+	           $.ajax({
+	                       url: "replyUpdateAction.jsp?b_id=<%=b_id%>",
+	                       type: 'GET',
+	                       data: {
+	                               'reply':reply,
+	                               'replyNum':replyNum
+	                           },
+	                       success: function (data) {
+	                    	   if(data.error != null){
+	                    		   alert("로그인이 필요합니다.");
+	                    	   }else{
+	                    		   document.getElementById("message").value='';	                    	   
+	                    		   $("#cmt_list").empty();
+	                    		   var a, b;
+		                    	   for(var i=0; i<data.jreply.length; i++){
+		                    		 if(i%2 == 0){
+		                    			 a = data.jreply[i].bundle;
+		                    		 }else{
+		                    			 b = data.jreply[i].bundle;
+		                    		 }
+		                    		 
+			                    		 if(a == b){
+			 								if(data.jreply[i].rec_nick != null){
+			 									$("#cmt_list").append("<span style='color:#ff630f;margin-left:13px;float:left'><b>┖</b></span><li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off' data-modifyText='off' style='float:right;width:742px;'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ",\"" + data.jreply[i].nick + "\",\"" + data.jreply[i].user_id + "\")'>답글</span><span class='reDeMod' id='re_de_mod_"+ data.jreply[i].num +"'>" + data.jreply[i].deleteAction + data.jreply[i].modifyAction +"</span><br> <span class='recNickBox' id='rec_"+ data.jreply[i].num +"' style='color:#828282;'>" + data.jreply[i].rec_nick + "</span><span class='replyDataClass' id='replyData_"+ data.jreply[i].num +"'>" + data.jreply[i].reply + "</span></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+			 									}else{
+			 									$("#cmt_list").append("<span style='color:#ff630f;margin-left:13px;float:left'><b>┖</b></span><li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off' data-modifyText='off' style='float:right;width:742px;'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ",\"" + data.jreply[i].nick + "\",\"" + data.jreply[i].user_id + "\")'>답글</span><span class='reDeMod' id='re_de_mod_"+ data.jreply[i].num +"'>" + data.jreply[i].deleteAction + data.jreply[i].modifyAction +"</span><br><span class='replyDataClass' id='replyData_"+ data.jreply[i].num +"'>" + data.jreply[i].reply + "</span></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+			 									}
+			 			      		   }else{
+			 			      			   if(data.jreply[i].user_id == 'none'){
+			 			      				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off'><div class='deleteText'>삭제된 댓글입니다.</div></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+			 			      			   }else{
+			 			      				   $("#cmt_list").append("<li class='replyStyle' id='replyNum_"+ data.jreply[i].num +"' data-replyText='off' data-modifyText='off'><b>" + data.jreply[i].nick + "</b> <span style='color:#595959;'>" + data.jreply[i].time + "</span><img src='<%=request.getContextPath()%>/img/replyArrow.png' class='replyArrow'><span class='replyOfreply' id='rereply_"+ data.jreply[i].num +"' onclick='replyOfreply("+ data.jreply[i].num +"," + data.jreply[i].bundle + ")'>답글</span><span class='reDeMod' id='re_de_mod_"+ data.jreply[i].num +"'>" + data.jreply[i].deleteAction + data.jreply[i].modifyAction +"</span><br><span class='replyDataClass' id='replyData_"+ data.jreply[i].num +"'>" + data.jreply[i].reply + "</span></li><div class='board-box-line-dashed' style='margin-top:3px;'></div>");
+			 			      				   
+			 			      			   }
+			 			      		   }
+	                    		   }
+	                    	   }
+	                    	    
+	                       },
+	                       error: function (data) {
+	                           alert("에러");
+	                       }
+	                   });
+	       }
+	   
 	   function replyOfreply(num, bundle, nick, rec_id){
+		   if(document.getElementById('modifyTable')){
+			   replyModify(document.getElementById('replyNum').value);
+		   }
 		  var confirm = "#replyNum_" + num;
 		  var rereplyNum = "rereply_" + num;
 		  
@@ -439,12 +495,12 @@
 			   document.getElementById(rereplyNum).innerHTML = "답글취소";
 			   if(nick != null){
 		   $("<div id='replyBox'><div class='board-box-line-dashed' style='margin-top:3px;'></div><li class='replyStyle'><table><tr><td style='width:697px;padding-right:0px;'><div id='contact-form'><span style='color:#ff630f;margin-left:13px;'><b>┖</b></span> \n" +
-		   "<textarea rows='1' id='rerepleText' class='form-control' style='height:62.8px;float:right;width:650px;' spellcheck='false' placeholder='" + nick + "님께 답글쓰기'></textarea></div></td>\n" +
+		   "<textarea rows='1' id='rerepleText' class='form-control' style='height:62.8px;float:right;width:650px;' spellcheck='false' placeholder='" + nick + "님께 답글쓰기'></textarea><input type='hidden' id='replyBox_Num' value='"+ num +"'></div></td>\n" +
 		   "<td style='padding-bottom:15px;vertical-align:bottom;padding-right:0px;'><input type='hidden' id='bundleData' value='" + bundle + "'><input type='hidden' id='rec_nick' value='" + nick + "'><input type='hidden' id='rec_id' value='" + rec_id + "'><input type='button' class='btn btn-sm viewButton submitReplyBtn' onclick='rereplySubmit()' value='등록'></td></tr></table>"+
 		   "</li></div>").insertAfter(confirm);
 			   }else{
 				   $("<div id='replyBox'><div class='board-box-line-dashed' style='margin-top:3px;'></div><li class='replyStyle'><table><tr><td style='width:697px;padding-right:0px;'><div id='contact-form'><span style='color:#ff630f;margin-left:13px;'><b>┖</b></span> \n" +
-						   "<textarea rows='1' id='rerepleText' class='form-control' style='height:62.8px;float:right;width:650px;' spellcheck='false'></textarea></div></td>\n" +
+						   "<textarea rows='1' id='rerepleText' class='form-control' style='height:62.8px;float:right;width:650px;' spellcheck='false'></textarea><input type='hidden' id='replyBox_Num' value='"+ num +"'></div></td>\n" +
 						   "<td style='padding-bottom:15px;vertical-align:bottom;padding-right:0px;'><input type='hidden' id='bundleData' value='" + bundle + "'><input type='button' class='btn btn-sm viewButton submitReplyBtn' onclick='rereplySubmit()' value='등록'></td></tr></table>"+
 						   "</li></div>").insertAfter(confirm);
 			   }
@@ -456,6 +512,9 @@
 	   }
 	   
 	   function replyModify(replyData_num){
+		   if(document.getElementById('replyBox')){
+			  	replyOfreply(document.getElementById('replyBox_Num').value);
+		   }
 		   var confirm = "#replyNum_" + replyData_num; // 수정모드 on off확인용
 		   var replyDataId = "replyData_" + replyData_num; // 답글 내용 데이터
 		   var reDeMod = "re_de_mod_" + replyData_num;//삭제 수정 을 감싼span의 id
@@ -507,11 +566,11 @@
 					    			"<tr>\n"+
 					    				"<td style='width:706px;padding-right:0px;'>\n"+
 							    			"<div id='contact-form' >\n"+
-											   "<textarea rows='1' id='message' class='form-control' style='height:62.8px;'spellcheck='false'>"+ replyData +"</textarea>\n"+
+											   "<textarea rows='1' id='messageUpdate' class='form-control' style='height:62.8px;'spellcheck='false'>"+ replyData +"</textarea>\n"+
 											"</div>\n"+
 										"</td>\n"+
-					    				"<td style='padding-bottom:15px;vertical-align:bottom;padding-right:0px;'>\n"+	    
-								    		"<input type='button' class='btn btn-sm viewButton submitReplyBtn' onclick='replySubmit()' value='수정'>\n"+
+					    				"<td style='vertical-align:bottom;padding-right:0px;'>\n"+	    
+								    		"<input id='replyNum' type='hidden' value='"+ replyData_num +"'><input type='button' class='btn btn-sm viewButton submitReplyBtn' style='margin-top:0px;padding-top:20px;padding-bottom:20px;' onclick='replyUpdate()' value='수정'>\n"+
 								    	"</td>\n"+
 					        		"</tr>\n"+
 					        "</table>").insertAfter("#"+replyDataId);

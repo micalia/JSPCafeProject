@@ -497,6 +497,45 @@ public class BoardsDAO {
 		return -1;
 	}
 	
+	public int replyUpdate(int n_replyNum, String reply) {
+		String SQL = "update reply set time = now(), reply = ? where num = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, reply);;
+			pstmt.setInt(2, n_replyNum);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int beforeUpdateChk(int n_replyNum, String id){
+		int count = 0;
+		String sql = "select count(*) from reply where num = ? and user_id = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, n_replyNum);
+			pstmt.setString(2, id);;
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+	
 	public int getBundleCount(int bundle){
 		int count = 0;
 		String sql = "select count(*) from reply where bundle = ?";
