@@ -71,8 +71,8 @@ public class BoardsDAO {
 	}
 
 	public int write(int boardNum, int board_id, String nick, String id, String subject, String content) {
-		String SQL = "insert into boards (id, board_id, boardName, nick, user_id, subject, content, uploadDate, hit, likeCount) "
-				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String SQL = "insert into boards (id, board_id, boardName, nick, user_id, subject, content, uploadDate, hit, likeCount, replyCount) "
+				+ "values (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0)";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 
@@ -84,8 +84,6 @@ public class BoardsDAO {
 			pstmt.setString(6, subject);
 			pstmt.setString(7, content);
 			pstmt.setString(8, getDate());
-			pstmt.setInt(9, 0);
-			pstmt.setInt(10, 0);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

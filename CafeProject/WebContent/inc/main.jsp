@@ -10,7 +10,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="#">
     <title></title>
     <!-- Styles -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-4.4.1-dist/css/bootstrap.min.css">
@@ -92,6 +91,7 @@ p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset
     overflow:hidden;
     width:860px;
     height: auto;
+    padding:8px 5px;
   }
 
   .content-area{
@@ -194,6 +194,16 @@ td{
     	width:112px;
     	white-space:nowrap;
     }
+    #searchBar{
+    	width:295px;
+    	float:right;
+    	border-radius:0px;
+    }
+    .searchBox{
+    	margin-top:7px;
+    	margin-bottom:-8px;
+    	overflow:hidden;
+    }
 </style>
   </head>
   <body>
@@ -211,6 +221,11 @@ td{
 	if (session.getAttribute("level") != null){
 		level = (int) session.getAttribute("level");
 	}
+	String board_id = null;
+	if(request.getParameter("board_id") != null){
+		board_id = request.getParameter("board_id");
+	}
+	BoardsDAO boardsDAO = new BoardsDAO();
 	%>
 	<div class="topbar">
 	<%
@@ -246,7 +261,9 @@ td{
     <%} %>
     </a>
 </div>
-
+<div class="searchBox">
+<button type="button" class="btn btn-info" style="float:right;border-radius:0px;">검색</button><input class="form-control" id="searchBar" type="text">
+</div>
 <div class="content-area">
 <div class="side-area" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 <div id="bodyLeft">
@@ -281,7 +298,7 @@ td{
 	<%
 		if(id != null){
 	%>
-            <button type="button" class="btn btn-secondary btn-block"style="border-radius: 0;"onclick="location.href='<%=request.getContextPath()%>/board/write.jsp'" >카페 글쓰기</button>
+            <button type="button" class="btn btn-secondary btn-block"style="border-radius: 0;"onclick="location.href='<%=request.getContextPath()%>/board/write.jsp<%if(board_id != null){%>?board_id=<%=board_id%><%}%>'" >카페 글쓰기</button>
        <%
 		}else{
 	%>
@@ -351,14 +368,14 @@ td{
 		C30.18,35.26,35.05,35.27,39.93,35.27z"/>
 </g>
 </svg>
-	<a href = "<%=request.getContextPath()%>/board/list.jsp" style="color:black;">전체글보기</a>
+<% int allCount = boardsDAO.getCount(); %>
+	<a href = "<%=request.getContextPath()%>/board/list.jsp" style="color:black;">전체글보기<span style="float:right;color:#333;font-size:14px;"><%=allCount%></span></a>
 	</li>
 </ul>
 <div class = "cafe-menu-space"></div>
   <ul class = "cafe-menu-list">
   
   <%
-	BoardsDAO boardsDAO = new BoardsDAO();
 	ArrayList<Board_ids> menuList = boardsDAO.mainGetMenuList();
 	for(int i = 0; i < menuList.size(); i++){
       %>

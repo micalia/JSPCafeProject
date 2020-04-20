@@ -58,11 +58,15 @@ $('#writeForm').show();
     <form name="writeForm" id="writeForm" style="display:none;"action="writeAction.jsp" onsubmit="return boardCheck()" method="post">
  
       <select name="board_id" id="boardid" style="width:156px;margin-bottom:9px;">
-        <option value="" selected>게시판선택</option>
+        <option value="">게시판선택</option>
         <%
+        int boardId = 0;
+        if(board_id != null){
+        	boardId = Integer.parseInt(board_id);
+        }
         for(int i = 0; i < menuList.size(); i++){
         	 %>
-      <option value="<%= menuList.get(i).getBoard_id() %>"><%= menuList.get(i).getBoardName() %></option>
+      <option value="<%= menuList.get(i).getBoard_id() %>"<%if(board_id != null){if(menuList.get(i).getBoard_id() == boardId){ %>selected<%} }%>><%= menuList.get(i).getBoardName() %></option>
        <% } %>
       </select><br>
       <input type="text" name="subject" id="subject"value="" placeholder="게시글 제목을 입력하세요" autocomplete="off">

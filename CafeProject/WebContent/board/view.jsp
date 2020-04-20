@@ -28,7 +28,7 @@
 	}
 	
 	String boardName = boardsDAO.getBoardName(boards.getBoard_id()); 
-	String board_id = request.getParameter("board_id");
+	//String board_id = request.getParameter("board_id"); => main.jsp에 include됨.
 	%>
 	<style>
 	.board-box-line-dashed{

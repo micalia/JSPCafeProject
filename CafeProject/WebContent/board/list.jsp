@@ -7,7 +7,6 @@
     <%@ page import="java.util.Date" %>
 <%@ include file="../inc/main.jsp" %>   
 <%
-String board_id = request.getParameter("board_id");
 int count, pageSize, currentPage, startRow, cot;
 ArrayList<Boards> list = null;
 pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
@@ -16,7 +15,7 @@ if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
 	pageNum = "1";
 }
 if(board_id == null){
-	count = boardsDAO.getCount(); //전체글수 php_total_article
+	count = allCount; //전체글수 php_total_article
 	currentPage = Integer.parseInt(pageNum);
 	startRow = (currentPage - 1) * pageSize;//php_start
 	cot =count-(pageSize*(currentPage-1));
@@ -137,6 +136,20 @@ if(board_id == null){
 	font-size:22px;
 	margin-bottom:17px;
 }
+.post_btns{
+	width:100%;
+	overflow:hidden;
+	height:auto;
+	margin-top:9px;
+}
+input.defaultCheckbox{
+	width:16px;
+	height:16px;
+}
+.td_chk{
+	padding-right:0px !important;
+	padding-left:12px !important;
+}
 </style>
 <div class = "article-board">
 <% 
@@ -154,14 +167,24 @@ if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) ==
 }%>
 <table>
 <colgroup>
+<%if(level>17){ %>
+<col style="width:11px;">
+<col style="width:88px;">
+<col>
+<col style="width:107px;">
+<col style="width:91px;">
+<col style="width:68px;">
+<%}else{ %>
 <col style="width:88px;">
 <col>
 <col style="width:118px;">
 <col style="width:91px;">
 <col style="width:68px;">
+<%} %>
 </colgroup>
 	<thead>
 		<tr>
+			<%if(level>17){ %><th></th><%} %>
 			<th></th>
 			<th>제목</th>
 			<th>작성자</th>
@@ -181,6 +204,7 @@ if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) ==
 			%>
 
 			<tr>
+			<%if(level>17){ %><td class="td_chk"><input type="checkbox" id="article_chk"class="defaultCheckbox" name="article_chk" value="<%= list.get(i).getId()%>" style="float:right;"></td><%} %>
 				<td class="td_num"><%= list.get(i).getId()%></td>
 				<td class="td_subject"><a href = "view.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
 				<td><%= list.get(i).getNick()%></td>
@@ -196,85 +220,121 @@ if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) ==
 	</tbody>
 </table>
 </div>
-
+<%if(id != null){ %>
+<div class="post_btns">
+<%if(level>17){ %><label for="all_chk"oncontextmenu="return false" onselectstart="return false" ondragstart="return false"style="margin-left:12px;"><input type="checkbox" onclick="allChk(this)" id="all_chk"class="defaultCheckbox" name="article_chk" value=""style="margin-right:5px;">전체선택</label><%} %>
+<button onclick="location.href='write.jsp<%if(board_id != null){%>?board_id=<%=board_id%><%}%>'"class="btn btn-link btn-sm" style ="float:right;padding: 6px 14px;color: black; border-radius: 0px; border:1px solid #a8a8a8 !important;">글쓰기</button>
+<%if(level>17){ %><button onclick="checkDelete()"class="btn btn-link btn-sm" style ="float:right;padding: 6px 14px;color: black; border-radius: 0px; border:1px solid #a8a8a8 !important;margin-right:6px;">삭제</button><%} %>
+</div>
+<%} %>
 <div class="paging">
 <div class="pagination">
 <%	// 페이징  처리
-						if(count > 0){
-						
-						int startPage;
-						int endPage;		
-						double pageSize2 = 15.0;
-							// 총 페이지의 수, pagesize = 레코드수
-							double pageCount = (double)Math.ceil(count / pageSize2);//total_page php
-							
-							// 한 페이지에 보여줄 시작 및 끝 번호(예 : 1, 2, 3 ~ 10 / 11, 12, 13 ~ 20)
-							int chk = currentPage%10;
-							if(chk == 0){
-								startPage = currentPage-9;
-							}else{
-								 startPage = currentPage-currentPage%10+1;
-							}
-							//int startPage = ((currentPage-1)/pageBlock)*pageBlock+1;
-							endPage = startPage + 10;
-							//그룹이동//php
-							//currentpage = 현재 페이지번호
-							// 마지막 페이지가 총 페이지 수 보다 크면 endPage를 pageCount로 할당
-							int prev_group=startPage-1;
-							if(prev_group<1)prev_group=1;
-							//다음그룹php
-							int pageCount2 = (int)Math.round(pageCount);
-							int next_group=endPage;
-							if(next_group>pageCount)next_group=pageCount2;//double=>int로 형변환
-							
-							/* if(endPage > pageCount){
-								endPage = pageCount;
-							} */
-							// 한 페이지에 보여줄 페이지 블럭(링크) 수
-							int pageBlock = 10;
-							if(currentPage>pageBlock){ // 페이지 블록수보다 startPage가 클경우 이전 링크 생성
-							if(board_id == null){ %>
-									<a href="list.jsp?page=<%=prev_group%>">이전</a>
-							<%	}else{%>
-									<a href="list.jsp?board_id=<%=board_id %>&page=<%=prev_group%>">이전</a>
-								<%	}
-							}
-							for(int i=startPage; i < endPage; i++){ // 페이지 블록 번호
-								if(i >pageCount2)break;
-							if(i==currentPage){ // 현재 페이지에는 링크를 설정하지 않음
-										if(board_id == null){%>
-											<a href="list.jsp?page=<%=i%>"class="active"><%=i %></a>
-										<%	}else{	%>
-											<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"class="active"><%=i %></a>
-											<% }
-									}else{ // 현재 페이지가 아닌 경우 링크 설정
-										if(board_id == null){	%>
-											<a href="list.jsp?page=<%=i%>"><%=i %></a>
-										<%	}else{%>
-											<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"><%=i %></a>
-											<%}
-										}
-							} // for end
-							
-							if(endPage <pageCount2){ // 현재 블록의 마지막 페이지보다 페이지 전체 블록수가 클경우 다음 링크 생성
-											if(board_id == null){%>
-												<a href="list.jsp?page=<%=startPage + 10 %>">다음</a>
-											<% }else{%>
-												<a href="list.jsp?board_id=<%=board_id %>&page=<%=startPage + 10 %>">다음</a>
-											<%}
-								}
-							}
-						}else{%>
-							<tr>
-							<td colspan="6">
-							<div class="nodata">등록된 게시글이 없습니다.</div>
-							</td>
-							</tr>
-							</tbody>
-							</table>
-							</div>
-						<% }%>
-								</div>
+if(count > 0){
+
+int startPage;
+int endPage;		
+double pageSize2 = 15.0;
+	// 총 페이지의 수, pagesize = 레코드수
+	double pageCount = (double)Math.ceil(count / pageSize2);//total_page php
+	
+	// 한 페이지에 보여줄 시작 및 끝 번호(예 : 1, 2, 3 ~ 10 / 11, 12, 13 ~ 20)
+	int chk = currentPage%10;
+	if(chk == 0){
+		startPage = currentPage-9;
+	}else{
+		 startPage = currentPage-currentPage%10+1;
+	}
+	//int startPage = ((currentPage-1)/pageBlock)*pageBlock+1;
+	endPage = startPage + 10;
+	//그룹이동//php
+	//currentpage = 현재 페이지번호
+	// 마지막 페이지가 총 페이지 수 보다 크면 endPage를 pageCount로 할당
+	int prev_group=startPage-1;
+	if(prev_group<1)prev_group=1;
+	//다음그룹php
+	int pageCount2 = (int)Math.round(pageCount);
+	int next_group=endPage;
+	if(next_group>pageCount)next_group=pageCount2;//double=>int로 형변환
+	
+	/* if(endPage > pageCount){
+		endPage = pageCount;
+	} */
+	// 한 페이지에 보여줄 페이지 블럭(링크) 수
+	int pageBlock = 10;
+	if(currentPage>pageBlock){ // 페이지 블록수보다 startPage가 클경우 이전 링크 생성
+	if(board_id == null){ %>
+			<a href="list.jsp?page=<%=prev_group%>">이전</a>
+	<%	}else{%>
+			<a href="list.jsp?board_id=<%=board_id %>&page=<%=prev_group%>">이전</a>
+		<%	}
+	}
+	for(int i=startPage; i < endPage; i++){ // 페이지 블록 번호
+		if(i >pageCount2)break;
+	if(i==currentPage){ // 현재 페이지에는 링크를 설정하지 않음
+				if(board_id == null){%>
+					<a href="list.jsp?page=<%=i%>"class="active"><%=i %></a>
+				<%	}else{	%>
+					<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"class="active"><%=i %></a>
+					<% }
+			}else{ // 현재 페이지가 아닌 경우 링크 설정
+				if(board_id == null){	%>
+					<a href="list.jsp?page=<%=i%>"><%=i %></a>
+				<%	}else{%>
+					<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"><%=i %></a>
+					<%}
+				}
+	} // for end
+	
+	if(endPage <pageCount2){ // 현재 블록의 마지막 페이지보다 페이지 전체 블록수가 클경우 다음 링크 생성
+					if(board_id == null){%>
+						<a href="list.jsp?page=<%=startPage + 10 %>">다음</a>
+					<% }else{%>
+						<a href="list.jsp?board_id=<%=board_id %>&page=<%=startPage + 10 %>">다음</a>
+					<%}
+		}
+	}
+}else{%>
+	<tr>
+	<td colspan="6">
+	<div class="nodata">등록된 게시글이 없습니다.</div>
+	</td>
+	</tr>
+	</tbody>
+	</table>
+	</div>
+<% }%>
+		</div>
 		
 </div> 
+<script>
+function allChk(source){
+	checkboxes = document.getElementsByName('article_chk');
+	  for(var i=0, n=checkboxes.length;i<n;i++) {
+		    checkboxes[i].checked = source.checked;
+	  }
+}
+
+function checkDelete(){
+	//var array = []
+	var checkboxes = document.querySelectorAll('#article_chk:checked')
+
+	var f = document.createElement("form"); // form 엘리멘트 생성 
+	f.setAttribute("method","post"); // method 속성을 post로 설정
+	f.setAttribute("action","chkDeleteAction.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}%>"); // submit했을 때 무슨 동작을 할 것인지 설정
+	document.body.appendChild(f); // 현재 페이지에 form 엘리멘트 추가 
+	
+	for(i=0;i<checkboxes.length;i++){
+		var chk = document.createElement("input"); // input 엘리멘트 생성 
+		chk.setAttribute("type","hidden"); // type 속성을 hidden으로 설정	
+		chk.setAttribute("name","article_chk"); // name 속성을 'm_nickname'으로 설정 
+		chk.setAttribute("value",checkboxes[i].value); // value 속성을 neilong에 담겨있는 값으로 설정 		
+		f.appendChild(chk); // form 엘리멘트에 input 엘리멘트 추가 
+	}
+
+	f.submit(); 
+	
+
+}
+</script>
 <%@ include file="../inc/footer.jsp" %> 
