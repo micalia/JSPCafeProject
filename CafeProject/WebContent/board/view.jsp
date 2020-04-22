@@ -22,11 +22,12 @@
 	
 	Boards boards = boardsDAO.show(b_id);
 	if(session.getAttribute("nick") != null){
-	if(!session.getAttribute("nick").equals(boards.getNick()))boardsDAO.hitUp(b_id);
+		if(!session.getAttribute("nick").equals(boards.getNick())){
+			boardsDAO.hitUp(b_id);
+			}
 	}else{
 		boardsDAO.hitUp(b_id);
 	}
-	
 	String boardName = boardsDAO.getBoardName(boards.getBoard_id()); 
 	//String board_id = request.getParameter("board_id"); => main.jsp에 include됨.
 	%>
@@ -612,7 +613,7 @@
    <%}%>
     </div>
     </div>
-   <button class="btn btn-sm viewButton" onclick="location.href='list.jsp<%if(board_id != null || request.getParameter("page") != null){ %>?<%}if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%= request.getParameter("page") %><%}%>'">목록</button>
+   <button class="btn btn-sm viewButton" onclick="location.href='list.jsp<%if(find != null || search != null || board_id != null || request.getParameter("page") != null){ %>?<%}if(find != null){%>find=<%=find %>&<%}if(search != null){%>search=<%=search%><%} if(search != null && request.getParameter("page") != null){%>&<%}if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%= request.getParameter("page") %><%}%>'">목록</button>
     <%if(id != null){if (id.equals(boards.getUser_id()) || level > 17){//level 18 이상부터 모든 게시물 삭제권한 부여
     %>
     	<button class="btn btn-sm viewButton" onclick="if(confirm('게시글을 삭제하시겠습니까?')){location.href='deleteAction.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%=request.getParameter("id") %>';}" style="margin-right:5px;">삭제</button>

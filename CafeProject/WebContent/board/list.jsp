@@ -7,7 +7,8 @@
     <%@ page import="java.util.Date" %>
 <%@ include file="../inc/main.jsp" %>   
 <%
-int count, pageSize, currentPage, startRow, cot;
+int pageSize, currentPage, startRow, cot;
+int count =0;
 ArrayList<Boards> list = null;
 pageSize = 15; // ==>> pageSize2변수 값도 바꿔 줘야함. 한 페이지에 출력할 레코드 수 php_ view_article
 String pageNum = request.getParameter("page");
@@ -15,12 +16,29 @@ if (pageNum == null){ // 클릭한게 없으면 1번 페이지php
 	pageNum = "1";
 }
 if(board_id == null){
-	count = allCount; //전체글수 php_total_article
+	if(search == null){
+			count = allCount; //전체글수 php_total_article	
+		}else if(find.equals("writer")){//글쓴이
+			count = boardsDAO.getCountSearchWriter(search);
+		}else if(find.equals("sub")){//제목
+			count = boardsDAO.getCountSearchSub(search);
+		}else if(find.equals("sub_con")){//제목 + 내용
+			count = boardsDAO.getCountSearch(search);
+		}
+	
 	currentPage = Integer.parseInt(pageNum);
 	startRow = (currentPage - 1) * pageSize;//php_start
 	cot =count-(pageSize*(currentPage-1));
 	if (count > 0) {
-		list = boardsDAO.getList(startRow, pageSize);
+		if(search == null){
+			list = boardsDAO.getList(startRow, pageSize);		
+		}else if(find.equals("writer")){//글작성자 -> 닉네임 + 아이디
+			list = boardsDAO.getSearchWriterList(search, startRow, pageSize);
+		}else if(find.equals("sub")){//제목
+			list = boardsDAO.getSearchSubList(search, startRow, pageSize);
+		}else if(find.equals("sub_con")){//제목 + 내용
+			list = boardsDAO.getSearchList(search, startRow, pageSize);
+		}
 			if(list.size() == 0){
 						currentPage -= 1;
 						if(currentPage > 0) {%>
@@ -150,20 +168,57 @@ input.defaultCheckbox{
 	padding-right:0px !important;
 	padding-left:12px !important;
 }
+#searchBarBottom{
+	width:209px;
+	margin:0 auto;
+	display:inline;
+	border-radius:0px;
+	vertical-align:bottom;
+	color:#333;
+}
+.searchBox-bottom{
+	margin-top:15px;
+	width:100%;
+	height:auto;
+	overflow:hidden;
+	text-align:center;
+}
+.serach-select{
+	width:107px;
+	display:inline;
+	border-radius:0px;
+	vertical-align:bottom;
+	margin-right:5px;
+	color:#333;
+}
+.divide-line{
+	color:#d1d1d1;
+	margin-top:7px;
+	margin-bottom:0px;
+}
+.form-control-sm{
+    height: calc(1.8em + .5rem + 2px);
+}
+.btn-sm{
+	padding: 0.38rem .5rem;
+}
 </style>
 <div class = "article-board">
 <% 
-if(request.getParameter("board_id") == null){%>
+if(request.getParameter("board_id") == null){
+	if(request.getParameter("search") == null){%>
 	<h3 class="boardName"><b>전체글보기</b></h3>
-<%}else{
-if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) == null){%>
-	 <script>
-	 alert("카페 운영진이 삭제했거나 없는 게시판입니다.");
-	 history.back();
-	 </script>
-<%}else{%>
-<h3 class="boardName"><b><%= boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) %></b></h3>
-<%}
+		<%}%>
+	
+	<%}else{
+		if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) == null){%>
+			 <script>
+			 alert("카페 운영진이 삭제했거나 없는 게시판입니다.");
+			 history.back();
+			 </script>
+		<%}else{%>
+		<h3 class="boardName"><b><%= boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) %></b></h3>
+		<%}
 }%>
 <table>
 <colgroup>
@@ -206,7 +261,7 @@ if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) ==
 			<tr>
 			<%if(level>17){ %><td class="td_chk"><input type="checkbox" id="article_chk"class="defaultCheckbox" name="article_chk" value="<%= list.get(i).getId()%>" style="float:right;"></td><%} %>
 				<td class="td_num"><%= list.get(i).getId()%></td>
-				<td class="td_subject"><a href = "view.jsp?<%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
+				<td class="td_subject"><a href = "view.jsp?<%if(find != null){%>find=<%=find %>&<%}if(search != null){ %>search=<%=search %>&<%} %><%if(board_id != null){ %>board_id=<%=request.getParameter("board_id") %><%} if(board_id != null && request.getParameter("page") != null){%>&<%}if(request.getParameter("page") != null){%>page=<%=request.getParameter("page") %><%}if(board_id != null || request.getParameter("page") != null){ %>&<%} %>id=<%= list.get(i).getId() %>"><%= list.get(i).getSubject()%></a></td>
 				<td><%= list.get(i).getNick()%></td>
 				<td class="td_date"><%if(currentTime.equals(list.get(i).getUploadDate().substring(0, 10).replace("-", "."))){%>
                         <%= list.get(i).getUploadDate().substring(11,16)%>
@@ -264,7 +319,7 @@ double pageSize2 = 15.0;
 	int pageBlock = 10;
 	if(currentPage>pageBlock){ // 페이지 블록수보다 startPage가 클경우 이전 링크 생성
 	if(board_id == null){ %>
-			<a href="list.jsp?page=<%=prev_group%>">이전</a>
+			<a href="list.jsp?<%if(find != null){ %>find=<%=find %>&<%}if(search != null){ %>search=<%=search %>&<%} %>page=<%=prev_group%>">이전</a>
 	<%	}else{%>
 			<a href="list.jsp?board_id=<%=board_id %>&page=<%=prev_group%>">이전</a>
 		<%	}
@@ -273,13 +328,13 @@ double pageSize2 = 15.0;
 		if(i >pageCount2)break;
 	if(i==currentPage){ // 현재 페이지에는 링크를 설정하지 않음
 				if(board_id == null){%>
-					<a href="list.jsp?page=<%=i%>"class="active"><%=i %></a>
+					<a href="list.jsp?<%if(find != null){ %>find=<%=find %>&<%}if(search != null){ %>search=<%=search %>&<%} %>page=<%=i%>"class="active"><%=i %></a>
 				<%	}else{	%>
 					<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"class="active"><%=i %></a>
 					<% }
 			}else{ // 현재 페이지가 아닌 경우 링크 설정
 				if(board_id == null){	%>
-					<a href="list.jsp?page=<%=i%>"><%=i %></a>
+					<a href="list.jsp?<%if(find != null){ %>find=<%=find %>&<%}if(search != null){ %>search=<%=search %>&<%} %>page=<%=i%>"><%=i %></a>
 				<%	}else{%>
 					<a href="list.jsp?board_id=<%=board_id %>&page=<%=i%>"><%=i %></a>
 					<%}
@@ -288,13 +343,16 @@ double pageSize2 = 15.0;
 	
 	if(endPage <pageCount2){ // 현재 블록의 마지막 페이지보다 페이지 전체 블록수가 클경우 다음 링크 생성
 					if(board_id == null){%>
-						<a href="list.jsp?page=<%=startPage + 10 %>">다음</a>
+						<a href="list.jsp?<%if(find != null){ %>find=<%=find %>&<%}if(search != null){ %>search=<%=search %>&<%} %>page=<%=startPage + 10 %>">다음</a>
 					<% }else{%>
 						<a href="list.jsp?board_id=<%=board_id %>&page=<%=startPage + 10 %>">다음</a>
 					<%}
 		}
 	}
-}else{%>
+%>
+</div>
+</div>
+<%}else{%>
 	<tr>
 	<td colspan="6">
 	<div class="nodata">등록된 게시글이 없습니다.</div>
@@ -304,8 +362,19 @@ double pageSize2 = 15.0;
 	</table>
 	</div>
 <% }%>
+<%if(count>0){ %>
+<hr class="divide-line">
+<%} %>
+	<div class="searchBox-bottom">
+	<form action="<%=request.getContextPath()%>/board/list.jsp" method="get" onsubmit="return searchBottomChk()">
+	<select name="find"class="form-control-sm serach-select">
+	  <option value="sub_con">제목+내용</option>
+	  <option value="sub">제목만</option>
+	  <option value="writer">글작성자</option>
+</select><input class="form-control-sm" name="search"id="searchBarBottom" type="text" autocomplete="off" placeholder="검색어를 입력해주세요"><button type="submit" class="btn btn-info btn-sm" style="border-radius:0px;width:51px;">검색</button>
+	</form>
+	</div>	
 		</div>
-		
 </div> 
 <script>
 function allChk(source){
@@ -334,7 +403,12 @@ function checkDelete(){
 
 	f.submit(); 
 	
-
 }
+	function searchBottomChk(){
+		if(document.getElementById("searchBarBottom").value == ""){
+			alert("검색어를 입력하세요.");
+			return false;
+		}
+	}
 </script>
 <%@ include file="../inc/footer.jsp" %> 

@@ -225,6 +225,9 @@ td{
 	if(request.getParameter("board_id") != null){
 		board_id = request.getParameter("board_id");
 	}
+
+	String find = request.getParameter("find");;//list.jsp, view.jsp find변수 사용
+	String search = request.getParameter("search");//list.jsp, view.jsp search변수 사용
 	BoardsDAO boardsDAO = new BoardsDAO();
 	%>
 	<div class="topbar">
@@ -262,7 +265,10 @@ td{
     </a>
 </div>
 <div class="searchBox">
-<button type="button" class="btn btn-info" style="float:right;border-radius:0px;">검색</button><input class="form-control" id="searchBar" type="text">
+<form action="<%=request.getContextPath()%>/board/list.jsp" method="get" onsubmit="return searchChk()">
+<input type="hidden" name="find" value="sub_con">
+<button type="submit" class="btn btn-info" style="float:right;border-radius:0px;">검색</button><input class="form-control" name="search"id="searchBar" type="text" autocomplete="off">
+</form>
 </div>
 <div class="content-area">
 <div class="side-area" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
@@ -458,6 +464,12 @@ function infoData2(){
 		d2.style.display = "block";
 		document.getElementById("myInfo").classList.add("infoTextActive");
 		document.getElementById("cafeInfo").classList.remove("infoTextActive");
+}
+function searchChk(){
+	if(document.getElementById("searchBar").value == ""){
+		alert("검색어를 입력하세요.");
+		return false;
+	}
 }
 </script>
 <div class = "main-area"> 

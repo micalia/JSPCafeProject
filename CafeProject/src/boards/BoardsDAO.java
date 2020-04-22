@@ -123,6 +123,107 @@ public class BoardsDAO {
 		return list;
 	}
 	
+	public ArrayList<Boards> getSearchList(String search, int page, int pagesize) {
+		String sql = "SELECT id, subject, nick, uploadDate, hit FROM boards where fnStripTags(content) like ? or subject like ? order by boards.id desc limit ?, ?";
+		ArrayList<Boards> list = new ArrayList<Boards>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setString(2, "%" + search + "%");
+			pstmt.setInt(3, page);
+			pstmt.setInt(4, pagesize);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Boards boards = new Boards();
+				boards.setId(rs.getInt(1));
+				boards.setSubject(rs.getString(2));
+				boards.setNick(rs.getString(3));
+				boards.setUploadDate(rs.getString(4));
+				boards.setHit(rs.getInt(5));
+				list.add(boards);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public ArrayList<Boards> getSearchSubList(String search, int page, int pagesize) {
+		String sql = "SELECT id, subject, nick, uploadDate, hit FROM boards where subject like ? order by boards.id desc limit ?, ?";
+		ArrayList<Boards> list = new ArrayList<Boards>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setInt(2, page);
+			pstmt.setInt(3, pagesize);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Boards boards = new Boards();
+				boards.setId(rs.getInt(1));
+				boards.setSubject(rs.getString(2));
+				boards.setNick(rs.getString(3));
+				boards.setUploadDate(rs.getString(4));
+				boards.setHit(rs.getInt(5));
+				list.add(boards);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public ArrayList<Boards> getSearchWriterList(String search, int page, int pagesize) {
+		String sql = "SELECT id, subject, nick, uploadDate, hit FROM boards where nick like ? or user_id = ? order by boards.id desc limit ?, ?";
+		ArrayList<Boards> list = new ArrayList<Boards>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setString(2, search);
+			pstmt.setInt(3, page);
+			pstmt.setInt(4, pagesize);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Boards boards = new Boards();
+				boards.setId(rs.getInt(1));
+				boards.setSubject(rs.getString(2));
+				boards.setNick(rs.getString(3));
+				boards.setUploadDate(rs.getString(4));
+				boards.setHit(rs.getInt(5));
+				list.add(boards);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
 	public ArrayList<Boards> getListInMenu(int boardId, int page, int pagesize) {
 		String sql = "SELECT id, subject, nick, uploadDate, hit FROM boards where board_id = ? order by boards.id desc limit ?, ?";
 		ArrayList<Boards> list = new ArrayList<Boards>();
@@ -325,6 +426,83 @@ public class BoardsDAO {
 		String sql = "select count(*) from boards";
 		try {
 			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+	
+	public int getCountSearch(String search){
+		int count = 0;
+		String sql = "select count(*) from boards where fnStripTags(content) like ? or subject like ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setString(2, "%" + search + "%");
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+	
+	public int getCountSearchSub(String search){
+		int count = 0;
+		String sql = "select count(*) from boards where subject like ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + search + "%");
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
+	
+	public int getCountSearchWriter(String search){
+		int count = 0;
+		String sql = "select count(*) from boards where nick like ? or user_id= ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setString(2, search);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				count = rs.getInt(1);
