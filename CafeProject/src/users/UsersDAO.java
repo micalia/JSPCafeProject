@@ -25,6 +25,31 @@ public class UsersDAO {
 		}
 	}
 	
+	public int checkGap(String id){
+		int timeGap = 0;
+		String sql = "SELECT TIMESTAMPDIFF(MINUTE, (select recentVisit from users where id = ?), now())";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,id);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				timeGap = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return timeGap; // 총 레코드 수 리턴
+	}
+	
 	public int login(String id, String password) {
 		String SQL = "select password from users where id = ?";
 		try {
@@ -75,8 +100,8 @@ public class UsersDAO {
 		Date time = new Date();
 		String currentTime = timeFormat.format(time);
 		String SQL = "insert into users(id, password, nick, born, gender, "
-				+ "email, phone, level, joinDate, recentVisit, writeCount, commentCount) "
-				+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "email, phone, level, joinDate, recentVisit, visitCount, writeCount, commentCount) "
+				+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, users.getId());
@@ -111,8 +136,8 @@ public class UsersDAO {
 		Date time = new Date();
 		String currentTime = timeFormat.format(time);
 		String SQL = "insert into users(id, password, nick, born, gender, "
-				+ " phone, level, joinDate, recentVisit, writeCount, commentCount) "
-				+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " phone, level, joinDate, recentVisit, visitCount, writeCount, commentCount) "
+				+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, users.getId());

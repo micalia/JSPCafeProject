@@ -168,7 +168,7 @@ input.defaultCheckbox{
 	padding-right:0px !important;
 	padding-left:12px !important;
 }
-#searchBarBottom{
+.search-input{
 	width:209px;
 	margin:0 auto;
 	display:inline;
@@ -183,6 +183,9 @@ input.defaultCheckbox{
 	overflow:hidden;
 	text-align:center;
 }
+.search-top{
+	margin-bottom:15px;
+}
 .serach-select{
 	width:107px;
 	display:inline;
@@ -196,20 +199,23 @@ input.defaultCheckbox{
 	margin-top:7px;
 	margin-bottom:0px;
 }
-.form-control-sm{
-    height: calc(1.8em + .5rem + 2px);
-}
-.btn-sm{
-	padding: 0.38rem .5rem;
-}
 </style>
 <div class = "article-board">
 <% 
 if(request.getParameter("board_id") == null){
 	if(request.getParameter("search") == null){%>
 	<h3 class="boardName"><b>전체글보기</b></h3>
-		<%}%>
-	
+		<%}else{%>
+		<div class="searchBox-bottom search-top">
+	<form action="<%=request.getContextPath()%>/board/list.jsp" method="get" onsubmit="return searchTopChk()">
+	<select name="find"class="form-control-sm serach-select">
+	  <option value="sub_con"<%if(find.equals("sub_con")){ %>selected<%} %>>제목+내용</option>
+	  <option value="sub"<%if(find.equals("sub")){ %>selected<%} %>>제목만</option>
+	  <option value="writer"<%if(find.equals("writer")){ %>selected<%} %>>글작성자</option>
+</select><input class="form-control-sm search-input" name="search"id="searchBarTop" type="text" autocomplete="off" <%if(request.getParameter("search") != null){%>value="<%=search %>"<%} %> placeholder="검색어를 입력해주세요"><button type="submit" class="btn btn-info btn-sm" style="border-radius:0px;width:51px;">검색</button>
+	</form>
+	</div>
+	<%} %>
 	<%}else{
 		if(boardsDAO.getBoardName(Integer.parseInt(request.getParameter("board_id"))) == null){%>
 			 <script>
@@ -371,7 +377,7 @@ double pageSize2 = 15.0;
 	  <option value="sub_con">제목+내용</option>
 	  <option value="sub">제목만</option>
 	  <option value="writer">글작성자</option>
-</select><input class="form-control-sm" name="search"id="searchBarBottom" type="text" autocomplete="off" placeholder="검색어를 입력해주세요"><button type="submit" class="btn btn-info btn-sm" style="border-radius:0px;width:51px;">검색</button>
+</select><input class="form-control-sm search-input" name="search"id="searchBarBottom" type="text" autocomplete="off" placeholder="검색어를 입력해주세요"><button type="submit" class="btn btn-info btn-sm" style="border-radius:0px;width:51px;">검색</button>
 	</form>
 	</div>	
 		</div>
@@ -406,6 +412,13 @@ function checkDelete(){
 }
 	function searchBottomChk(){
 		if(document.getElementById("searchBarBottom").value == ""){
+			alert("검색어를 입력하세요.");
+			return false;
+		}
+	}
+	
+	function searchTopChk(){
+		if(document.getElementById("searchBarTop").value == ""){
 			alert("검색어를 입력하세요.");
 			return false;
 		}

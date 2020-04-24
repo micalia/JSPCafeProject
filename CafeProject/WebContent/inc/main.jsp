@@ -5,7 +5,7 @@
     <%@ page import="boards.Board_ids" %>
     <%@ page import="users.UsersDAO" %>
     <%@ page import="java.util.ArrayList" %>
-    
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -225,8 +225,17 @@ td{
 	if(request.getParameter("board_id") != null){
 		board_id = request.getParameter("board_id");
 	}
-
-	String find = request.getParameter("find");;//list.jsp, view.jsp find변수 사용
+	UsersDAO usersDAO = new UsersDAO();
+	int timeChk =0;
+	if(id != null){
+		timeChk = usersDAO.checkGap(id);
+		if(timeChk > 30){
+			//방문수 올리기			
+		}else{
+			//최근방문일 update
+		}
+	}
+	String find = request.getParameter("find");//list.jsp, view.jsp find변수 사용
 	String search = request.getParameter("search");//list.jsp, view.jsp search변수 사용
 	BoardsDAO boardsDAO = new BoardsDAO();
 	%>
@@ -265,7 +274,7 @@ td{
     </a>
 </div>
 <div class="searchBox">
-<form action="<%=request.getContextPath()%>/board/list.jsp" method="get" onsubmit="return searchChk()">
+<form action="<%=request.getContextPath()%>/board/list.jsp" method="get" onsubmit="return searchChk(this)">
 <input type="hidden" name="find" value="sub_con">
 <button type="submit" class="btn btn-info" style="float:right;border-radius:0px;">검색</button><input class="form-control" name="search"id="searchBar" type="text" autocomplete="off">
 </form>
@@ -465,7 +474,7 @@ function infoData2(){
 		document.getElementById("myInfo").classList.add("infoTextActive");
 		document.getElementById("cafeInfo").classList.remove("infoTextActive");
 }
-function searchChk(){
+function searchChk(form){
 	if(document.getElementById("searchBar").value == ""){
 		alert("검색어를 입력하세요.");
 		return false;
