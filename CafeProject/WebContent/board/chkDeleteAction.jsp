@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>    
+<%@ page import="users.UsersDAO" %>
 <%@ page import="boards.BoardsDAO" %>
 <%@ page import="java.io.PrintWriter" %>
 <% request.setCharacterEncoding("UTF-8"); %>
@@ -52,9 +53,19 @@ if(request.getParameter("article_chk") == null ){
 	for(int i=0; i<checkBoxes.length; i++){
 		checkIntArr[i] = Integer.parseInt(checkBoxes[i]);
 	} 
-	
+	int result = -1;
 	for(int i=0;i<checkIntArr.length;i++) {
-		int result = boardsDAO.delete(checkIntArr[i]);
+		UsersDAO usersDAO = new UsersDAO();
+		result = usersDAO.writeCountDown(checkIntArr[i]);
+		if(result == -1){
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('글 삭제에 실패했습니다.')");
+			script.println("history.back()");
+			script.println("</script>");
+			if(true) return;
+		}	
+		result = boardsDAO.delete(checkIntArr[i]);
 		if(result == -1){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");

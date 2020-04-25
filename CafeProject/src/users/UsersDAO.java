@@ -50,6 +50,104 @@ public class UsersDAO {
 		return timeGap; // 총 레코드 수 리턴
 	}
 	
+	public int visAndRecUpd(String id) {
+		String SQL = "update users set recentVisit = now(), visitCount = visitCount + 1 where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, id);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int recVisUpdate(String id) {
+		String SQL = "update users set recentVisit = now() where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, id);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int getVisitCount(String id) {
+			int visitCount;
+			String SQL = "select visitCount from users where id = ?";
+			try {
+				pstmt = conn.prepareStatement(SQL);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					visitCount = rs.getInt(1);
+					
+					return visitCount;
+				}
+				return -1; 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					if(rs != null) rs.close();
+					if(pstmt != null) pstmt.close();
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return -2; 
+	}
+	
+	public int writeCountUp(String id) {
+		String SQL = "update users set writeCount = writeCount + 1 where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, id);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int writeCountDown(int b_id) {
+		String SQL = "update users set writeCount = writeCount - 1 where id = (select user_id from boards where id = ?)";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, b_id);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int commentCountUp(String id) {
+		String SQL = "update users set commentCount = commentCount + 1 where id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, id);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int commentCountDown(int reply_num) {
+		String SQL = "update users set commentCount = commentCount - 1 where id = (select user_id from reply where num = ?)";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, reply_num);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 	public int login(String id, String password) {
 		String SQL = "select password from users where id = ?";
 		try {

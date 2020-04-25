@@ -677,7 +677,7 @@ public class BoardsDAO {
 		String SQL = "update reply set time = now(), reply = ? where num = ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, reply);;
+			pstmt.setString(1, reply);
 			pstmt.setInt(2, n_replyNum);
 			return pstmt.executeUpdate();
 		}catch(Exception e){

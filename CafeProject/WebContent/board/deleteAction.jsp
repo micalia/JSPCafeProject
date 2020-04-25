@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import ="users.UsersDAO" %>
 <%@ page import="boards.BoardsDAO" %>
 <%@ page import="boards.Boards" %>
 <%@ page import="java.io.PrintWriter" %>
@@ -44,17 +45,29 @@
 		String board_id = request.getParameter("board_id");
 		
 		Boards boards = new BoardsDAO().show(b_id);
-		
+		int result = -1;
 		if(id != null){
 		if (id.equals(boards.getUser_id()) || level > 17){//level 18 이상부터 모든 게시물 삭제권한 부여
 				BoardsDAO boardsDAO= new BoardsDAO();
-				int result = boardsDAO.delete(b_id);
+				UsersDAO usersDAO = new UsersDAO();
+				
+				result = usersDAO.writeCountDown(b_id);
 				if(result == -1){
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
 					script.println("alert('글 삭제에 실패했습니다.')");
 					script.println("history.back()");
 					script.println("</script>");
+					if(true)return;
+				}
+				result = boardsDAO.delete(b_id);
+				if(result == -1){
+					PrintWriter script = response.getWriter();
+					script.println("<script>");
+					script.println("alert('글 삭제에 실패했습니다.')");
+					script.println("history.back()");
+					script.println("</script>");
+					if(true)return;
 				}
 				else{
 				%> 
@@ -68,6 +81,7 @@
 			script.println("alert('권한이 없습니다.')");
 			script.println("location.href = 'list.jsp'");
 			script.println("</script>");
+			if(true)return;
 						
 		}
 		} 

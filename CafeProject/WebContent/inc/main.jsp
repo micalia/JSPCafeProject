@@ -227,13 +227,17 @@ td{
 	}
 	UsersDAO usersDAO = new UsersDAO();
 	int timeChk =0;
+	int visitCount = 0;
+	int writeCount = 0;
+	int commentCount = 0;
 	if(id != null){
 		timeChk = usersDAO.checkGap(id);
 		if(timeChk > 30){
-			//방문수 올리기			
+			usersDAO.visAndRecUpd(id);//방문수 올리기	visitCount, recentVisit update		
 		}else{
-			//최근방문일 update
+			usersDAO.recVisUpdate(id);//최근방문일 update
 		}
+		visitCount = usersDAO.getVisitCount(id);
 	}
 	String find = request.getParameter("find");//list.jsp, view.jsp find변수 사용
 	String search = request.getParameter("search");//list.jsp, view.jsp search변수 사용
@@ -307,7 +311,8 @@ td{
      <span class="nickText"><%= nick %></span>
     	 <br>
  
-       레벨 : <%= level %>
+       레벨 : <%= level %><br>
+    방문수 : <%= visitCount %>
       </div>
 <%} %>
 	<%

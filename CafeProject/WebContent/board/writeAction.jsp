@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="users.UsersDAO" %>
 <%@ page import="boards.BoardsDAO" %>
 <%@ page import="java.io.PrintWriter" %>
 <% request.setCharacterEncoding("UTF-8"); %>
@@ -43,6 +44,8 @@
 						script.println("</script>");
 					}
 					else{
+						UsersDAO usersDAO = new UsersDAO();
+						usersDAO.writeCountUp(id);
 						PrintWriter script = response.getWriter();
 						String SboardNum = Integer.toString(boardNum);
 						script.println("<script>");

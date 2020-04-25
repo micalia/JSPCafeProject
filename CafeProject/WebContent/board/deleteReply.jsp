@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="users.UsersDAO" %>    
 <%@ page import="boards.BoardsDAO" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="org.json.simple.JSONObject"%>
@@ -21,16 +22,17 @@ if (session.getAttribute("level") != null){
 	level = (int) session.getAttribute("level");
 }
 int b_id = Integer.parseInt(request.getParameter("b_id"));
-int reply_num = Integer.parseInt(request.getParameter("reply_num"));
+int reply_num = Integer.parseInt(request.getParameter("reply_num"));//댓글의 기본키
 int bundle = -1;
 int result = -1;
 if(request.getParameter("bundle") != null){
 bundle = Integer.parseInt(request.getParameter("bundle"));
 }
-
+UsersDAO usersDAO = new UsersDAO();
 	  BoardsDAO boardsDAO = new BoardsDAO();
 if(id != null){
 	int bundleChk = boardsDAO.getBundleCount(bundle);
+	result = usersDAO.commentCountDown(reply_num);//users 댓글수 감소
 	if(bundleChk > 1){//같은이름의 번들이 여러개라면
 		int bundleHost = boardsDAO.getBundleHost(bundle);
 		if(bundleHost == reply_num){//번들 호스트라면 '삭제된댓글'로 업데이트
@@ -56,7 +58,7 @@ if(result == -1){
 	response.setContentType("application/json");
 	out.print(json.toJSONString());
 }else{
-	boardsDAO.replyDownCount(b_id);
+	boardsDAO.replyDownCount(b_id);//게시물의 댓글수 감소
 	JSONArray jArray = new JSONArray();
 	JSONObject json= new JSONObject();
 	ArrayList<Reply> replyList = boardsDAO.getReply(b_id); 

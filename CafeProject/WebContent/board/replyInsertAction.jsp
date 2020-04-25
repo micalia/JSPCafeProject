@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="boards.BoardsDAO" %>
+<%@ page import="users.UsersDAO" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="org.json.simple.JSONObject"%>
 <%@ page import="org.json.simple.JSONArray"%>
@@ -40,6 +41,8 @@ if(result == -1){
 	out.print(json.toJSONString());
 }else{
 	boardsDAO.replyUpCount(b_id);
+	UsersDAO usersDAO = new UsersDAO();
+	usersDAO.commentCountUp(id);
 	JSONArray jArray = new JSONArray();
 	JSONObject json= new JSONObject();
 	ArrayList<Reply> replyList = boardsDAO.getReply(b_id); 
