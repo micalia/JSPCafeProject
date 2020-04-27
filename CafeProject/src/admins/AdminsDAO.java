@@ -303,4 +303,123 @@ return -1;
 		}
 		return count; // 총 레코드 수 리턴
 	}
+	
+	public int insertLevelInfo() {
+		try {
+			for(int i =1; i<7; i++) {
+			String SQL = "insert into level_name(level, levelName, lv_explain, boardC, commentC, visitC, activation) values("+ i +", \"\", \"\", 0, 0, 0, 0)";
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.executeUpdate();
+			}
+			return 1;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public int updateLevelInfo1(String lvName_1, String explain_1) {
+		String SQL = "update level_name set levelName = ?, lv_explain = ? where level = 1";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, lvName_1);
+			pstmt.setString(2, explain_1);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+		}
+	public int updateLevelInfo2(String lvName_2, String explain_2, int board_2, int comment_2, int visit_2, int selectValue_2) {
+		String SQL = "update level_name set levelName = ?, lv_explain = ?, boardC = ?, commentC = ?, visitC = ?, activation = ? where level = 2";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, lvName_2);
+			pstmt.setString(2, explain_2);
+			pstmt.setInt(3, board_2);
+			pstmt.setInt(4, comment_2);
+			pstmt.setInt(5, visit_2);
+			pstmt.setInt(6, selectValue_2);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int updateLevelInfo3(String lvName_3, String explain_3, int board_3, int comment_3, int visit_3, int selectValue_3) {
+		String SQL = "update level_name set levelName = ?, lv_explain = ?, boardC = ?, commentC = ?, visitC = ?, activation = ? where level = 3";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, lvName_3);
+			pstmt.setString(2, explain_3);
+			pstmt.setInt(3, board_3);
+			pstmt.setInt(4, comment_3);
+			pstmt.setInt(5, visit_3);
+			pstmt.setInt(6, selectValue_3);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int updateLevelInfo4(String lvName_4, String explain_4, int board_4, int comment_4, int visit_4, int selectValue_4) {
+		String SQL = "update level_name set levelName = ?, lv_explain = ?, boardC = ?, commentC = ?, visitC = ?, activation = ? where level = 4";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, lvName_4);
+			pstmt.setString(2, explain_4);
+			pstmt.setInt(3, board_4);
+			pstmt.setInt(4, comment_4);
+			pstmt.setInt(5, visit_4);
+			pstmt.setInt(6, selectValue_4);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int updateLevelInfo5(String lvName_5, String explain_5, int board_5, int comment_5, int visit_5, int selectValue_5) {
+		String SQL = "update level_name set levelName = ?, lv_explain = ?, boardC = ?, commentC = ?, visitC = ?, activation = ? where level = 5";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, lvName_5);
+			pstmt.setString(2, explain_5);
+			pstmt.setInt(3, board_5);
+			pstmt.setInt(4, comment_5);
+			pstmt.setInt(5, visit_5);
+			pstmt.setInt(6, selectValue_5);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int updateLevelInfo6(String lvName_6, String explain_6, int board_6, int comment_6, int visit_6, int selectValue_6) {
+		String SQL = "update level_name set levelName = ?, lv_explain = ?, boardC = ?, commentC = ?, visitC = ?, activation = ? where level = 6";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, lvName_6);
+			pstmt.setString(2, explain_6);
+			pstmt.setInt(3, board_6);
+			pstmt.setInt(4, comment_6);
+			pstmt.setInt(5, visit_6);
+			pstmt.setInt(6, selectValue_6);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+	public int activate(int target) {
+		String SQL = "update level_name set activation = 0 where level = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, target);
+			return pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }
