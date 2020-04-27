@@ -279,4 +279,28 @@ return -1;
 		}
 		return count; // 총 레코드 수 리턴
 	}
+	
+	public int chkLevelExist(){
+		int count = 0;
+		String sql = "select count(*) from level_name where level=1";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; // 총 레코드 수 리턴
+	}
 }
