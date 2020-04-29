@@ -61,7 +61,7 @@ if(adminsDAO.chkLevelExist() == 0){%>
 	
 }
 %>
-<form action="levelInfoAction.jsp" method="post" onsubmit="return saveLevelInfo()"> 
+<!-- <form action="levelInfoAction.jsp" method="post" onsubmit="return saveLevelInfo()">  -->
 <table class="tbl_level"border="1">
 	<colgroup>
 		<col width="32px">	
@@ -200,8 +200,8 @@ if(adminsDAO.chkLevelExist() == 0){%>
 		
 	</tbody>
 </table>
-<center style="margin-top:15px;"><button type="submit" class="btn btn-primary">저장하기</button></center>
-</form>
+<center style="margin-top:15px;"><button type="submit" class="btn btn-primary" onclick="saveLevelInfo()">저장하기</button></center>
+<!-- </form> -->
 <script>
 function conditionChk(num){
 	var s_idChk = "selectLevel" + num;
@@ -272,7 +272,20 @@ function levelPlus(num){
 
 function saveLevelInfo(){
 	var selectValue_arr = document.getElementsByClassName("selectValue");
+	var chkCountArr = new Array();
+	var lv_1 = document.getElementsByName("lvName_1")[0];
+	var ex_1 = document.getElementsByName("explain_1")[0];
 	
+	if(lv_1.value == ""){
+		alert("등급을 입력하세요.");
+		lv_1.focus();
+		return false;
+	}
+	if(ex_1.value == ""){
+		alert("설명을 입력하세요.");
+		ex_1.focus();
+		return false;
+	}
    for(var i=0;i<selectValue_arr.length;i++){	//설정안함 옵션이라면 자동등업 조건의 값들을 모두 0으로 바꾸고 값들을 submit.
     		var num = selectValue_arr[i].id.replace("selectLevel","");
     		var board = "board_" + num;
@@ -282,7 +295,21 @@ function saveLevelInfo(){
     		var b = document.getElementsByName(board)[0];
     		var c = document.getElementsByName(comment)[0];
     		var v = document.getElementsByName(visit)[0];
+    		var lvName = "lvName_" + num;
+    		var explain = "explain_" + num;
     		
+    		if(document.getElementById(selectLevel).disabled == false){
+    			if(document.getElementById(lvName).value == ""){
+    				alert("등급을 입력하세요.");
+    				document.getElementById(lvName).focus();
+    				return false;
+    			}
+    			if(document.getElementById(explain).value == ""){
+    				alert("설명을 입력하세요.");
+    				document.getElementById(explain).focus();
+    				return false;
+    			}
+    		}
     	if(selectValue_arr[i].value == 1){
     		b.value = 0;
     		c.value = 0;
@@ -315,9 +342,58 @@ function saveLevelInfo(){
     			v.focus();
     			return false;
     		}
+    		chkCountArr.push(num);
+    		
     	}   	
    }
    
+   
+   for(i=0; i<chkCountArr.length; i++){
+	   var board = "board_" + chkCountArr[i];
+	   var comment = "comment_" + chkCountArr[i];
+	   var visit = "visit_" + chkCountArr[i];
+	   if(chkCountArr[i+1]){
+	   var board2 = "board_" + chkCountArr[i+1];
+	   var b1 = document.getElementsByName(board)[0].value;
+	   var b2 = document.getElementsByName(board2)[0].value; 
+	   var comment2 = "comment_" + chkCountArr[i+1];
+	   var c1 = document.getElementsByName(comment)[0].value;
+	   var c2 = document.getElementsByName(comment2)[0].value; 
+	   var visit2 = "visit_" + chkCountArr[i+1];
+	   var v1 = document.getElementsByName(visit)[0].value;
+	   var v2 = document.getElementsByName(visit2)[0].value; 
+	   
+	   var bchk = 0;
+	   var cchk = 0;
+	   var vchk = 0;
+	   
+		   if(b1 < b2){
+			   bchk += 2;
+		   }else if(b1 == b2){
+			   bchk += 1;
+		   }
+		   
+		   if(c1 < c2){
+			   cchk += 2;
+		   }else if(c1 == c2){
+			   cchk += 1;
+		   }
+
+		   if(v1 < v2){
+			   vchk += 2;
+		   }else if(v1 == v2){
+			   vchk += 1;
+		   }
+
+		   var result = bchk + cchk + vchk;
+		   if(result <= 3){   // 등급 조건중 최소 한개 이상은 전에 값보다 커야한다. 
+				alert(board2 + "의 등업 조건이 낮은 등급보다 높아야 합니다");
+			   return false;
+		   }
+		   
+	   }
+   }
+   alert("전송");
 }
 </script>
 
