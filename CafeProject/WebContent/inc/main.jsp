@@ -391,6 +391,18 @@ td{
 <% int allCount = boardsDAO.getCount(); %>
 	<a href = "<%=request.getContextPath()%>/board/list.jsp" style="color:black;">전체글보기<span style="float:right;color:#333;font-size:14px;"><%=allCount%></span></a>
 	</li>
+	<li>
+	<span style="margin-left:-3px;">◎</span>
+		<a href = "<%=request.getContextPath()%>/GPS.jsp" style="color:black;">GPS</a>
+	</li>
+	<li>
+	<span style="margin-left:-3px;">◎</span>
+		<a href = "<%=request.getContextPath()%>/GPS2.jsp" style="color:black;">GPS2</a>
+	</li>
+	<li>
+	<span style="margin-left:-3px;">◎</span>
+		<a href = "<%=request.getContextPath()%>/GPS3.jsp" style="color:black;">GPS3</a>
+	</li>
 </ul>
 <div class = "cafe-menu-space"></div>
   <ul class = "cafe-menu-list">

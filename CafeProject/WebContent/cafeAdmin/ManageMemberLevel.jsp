@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="admins.AdminsDAO" %>
+<%@ page import="admins.Level_name" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +14,7 @@
 <style>
 .tbl_level{
 	margin:0 auto;
-	margin-top:188px;
+	margin-top:32px;
 	width:936px;
 }
 .explain{
@@ -34,7 +36,9 @@
 <body>
 <%
 AdminsDAO adminsDAO = new AdminsDAO();  
-if(adminsDAO.chkLevelExist() == 0){%>
+int lv_Info = adminsDAO.chkLevelExist();
+ArrayList<Level_name> lvInfoArr = new ArrayList<Level_name>();
+if(lv_Info == 0){%>
 	<script>
 		$(document).ready(function(){
 		    document.getElementById("lvName_1").value = "새싹멤버";
@@ -58,10 +62,16 @@ if(adminsDAO.chkLevelExist() == 0){%>
 		});
 	</script>
 <%}else{
-	
+	lvInfoArr = adminsDAO.getLevelInfo();
 }
 %>
-<!-- <form action="levelInfoAction.jsp" method="post" onsubmit="return saveLevelInfo()">  -->
+<center style="margin-top:31px;">
+<a href="<%=request.getContextPath()%>/home.jsp">
+<img src="../img/cafeLogo.png"style="height:61px;">
+</a><br><br>
+<a href="./ManageHome.jsp">카페 관리자 메뉴</a>
+</center>
+<form action="levelInfoAction.jsp" method="post" onsubmit="return saveLevelInfo()">
 <table class="tbl_level"border="1">
 	<colgroup>
 		<col width="32px">	
@@ -82,126 +92,216 @@ if(adminsDAO.chkLevelExist() == 0){%>
 	<tbody>
 		<tr>
 			<td>①</td>
-			<td><input type="text" id="lvName_1" name="lvName_1" class="levelName-input" maxlength="7"></td>
-			<td><input type="text" id="explain_1" name="explain_1" class="explain" maxlength="36"></td>
+			<td><input type="text" id="lvName_1" name="lvName_1" class="levelName-input" maxlength="7" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(0).getLevelName() %>"<%} %>></td>
+			<td><input type="text" id="explain_1" name="explain_1" class="explain" maxlength="36" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(0).getLv_explain() %>"<%} %>></td>
 			<td></td>
 			<td></td>
 		</tr>
 		<tr>
 			<td>②</td>
-			<td><input type="text" id="lvName_2" name="lvName_2" class="levelName-input" maxlength="7"></td>
-			<td><input type="text" id="explain_2" name="explain_2" class="explain" maxlength="36">
-				<p id="condition_2" style="display:none;">
-					<span class="p_font">게시글 </span><input type ="text" name="board_2" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">댓글 </span><input type = "text" name="comment_2" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">출석 </span><input type = "text" name="visit_2" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">회 만족 시 자동등업</span>
+			<td><input type="text" id="lvName_2" name="lvName_2" class="levelName-input" maxlength="7" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(1).getLevelName() %>"<%if(lvInfoArr.get(1).getActivation() == 0 ){%>disabled<%}} %>></td>
+			<td><input type="text" id="explain_2" name="explain_2" class="explain" maxlength="36" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(1).getLv_explain() %>"<%if(lvInfoArr.get(1).getActivation() == 0 ){%>disabled<%}} %>>
+				<p id="condition_2" <%if(lv_Info != 0){if(lvInfoArr.get(1).getActivation() != 2 ){%>style="display:none;"<%}}else{%>style="display:none;" <%} %>>
+					<span class="p_font">게시글 </span><input type ="text" name="board_2" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(1).getBoardC() %>"<%if(lvInfoArr.get(1).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">댓글 </span><input type = "text" name="comment_2" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(1).getCommentC() %>"<%if(lvInfoArr.get(1).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">출석 </span><input type = "text" name="visit_2" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(1).getVisitC() %>"<%if(lvInfoArr.get(1).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">회 만족 시 자동등업</span>
 				</p>
-				<p id="deleteMsg_2" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(1).getActivation() == 0 ){%>
+						<p id="deleteMsg_2" style="display:block;">해당등급이 삭제 되었습니다.</p>
+					<%}else{%>
+						<p id="deleteMsg_2" style="display:none;">해당등급이 삭제 되었습니다.</p>
+					<%} 
+				}else{%>
+					<p id="deleteMsg_2" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%}%>
 			</td>
 			<td>
-				<select id="selectLevel2" name="selectValue_2" class="selectValue" onchange="conditionChk(2)">
+				<select id="selectLevel2" name="selectValue_2" class="selectValue" onchange="conditionChk(2)" <%if(lv_Info != 0){ if(lvInfoArr.get(1).getActivation() == 0 ){%>disabled<%}} %>>
 					<option value="1">설정안함</option>
-					<option value="2">자동등업</option>
+					<option value="2"<%if(lv_Info != 0){if(lvInfoArr.get(1).getActivation() == 2 ){%> selected<%}}%>>자동등업</option>
 				</select>
 			</td>
 			<td>
-				<button type="button" id="deleteBtn_2" class="btn btn-primary btn-sm" onclick="levelDelete(2)">삭제</button>
-				<button type="button" id="plusBtn_2" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(2)">추가</button>				
+			<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(1).getActivation() == 0){%>
+						<button type="button" id="deleteBtn_2" class="btn btn-primary btn-sm" style="display:none;" onclick="levelDelete(2)">삭제</button>
+						<button type="button" id="plusBtn_2" class="btn btn-primary btn-sm" onclick="levelPlus(2)">추가</button>
+					<%}else{%>
+						<button type="button" id="deleteBtn_2" class="btn btn-primary btn-sm" onclick="levelDelete(2)">삭제</button>
+						<button type="button" id="plusBtn_2" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(2)">추가</button>
+						<%}
+				}else{%>
+					<button type="button" id="deleteBtn_2" class="btn btn-primary btn-sm" onclick="levelDelete(2)">삭제</button>
+					<button type="button" id="plusBtn_2" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(2)">추가</button>	
+				<%} %>			
 			</td>
 		</tr>
 		<tr>
 			<td>③</td>
-			<td><input type="text" id="lvName_3" name="lvName_3" class="levelName-input" maxlength="7"></td>
-			<td><input type="text" id="explain_3" name="explain_3" class="explain" maxlength="36">
-				<p id="condition_3" style="display:none;">
-					<span class="p_font">게시글 </span><input type ="text" name="board_3" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">댓글 </span><input type = "text" name="comment_3" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">출석 </span><input type = "text" name="visit_3" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">회 만족 시 자동등업</span>
+			<td><input type="text" id="lvName_3" name="lvName_3" class="levelName-input" maxlength="7" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(2).getLevelName() %>"<%if(lvInfoArr.get(2).getActivation() == 0 ){%>disabled<%}} %>></td>
+			<td><input type="text" id="explain_3" name="explain_3" class="explain" maxlength="36" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(2).getLv_explain() %>"<%if(lvInfoArr.get(2).getActivation() == 0 ){%>disabled<%}} %>>
+				<p id="condition_3" <%if(lv_Info != 0){if(lvInfoArr.get(2).getActivation() != 2 ){%>style="display:none;"<%}}else{%>style="display:none;" <%} %>>
+					<span class="p_font">게시글 </span><input type ="text" name="board_3" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(2).getBoardC() %>"<%if(lvInfoArr.get(2).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">댓글 </span><input type = "text" name="comment_3" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(2).getCommentC() %>"<%if(lvInfoArr.get(2).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">출석 </span><input type = "text" name="visit_3" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(2).getVisitC() %>"<%if(lvInfoArr.get(2).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">회 만족 시 자동등업</span>
 				</p>
-				<p id="deleteMsg_3" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(2).getActivation() == 0 ){%>
+						<p id="deleteMsg_3" style="display:block;">해당등급이 삭제 되었습니다.</p>
+					<%}else{%>
+						<p id="deleteMsg_3" style="display:none;">해당등급이 삭제 되었습니다.</p>
+					<%} 
+				}else{%>
+					<p id="deleteMsg_3" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%}%>
 			</td>
 			<td>
-				<select id="selectLevel3" name="selectValue_3" class="selectValue" onchange="conditionChk(3)">
+				<select id="selectLevel3" name="selectValue_3" class="selectValue" onchange="conditionChk(3)" <%if(lv_Info != 0){ if(lvInfoArr.get(2).getActivation() == 0 ){%>disabled<%}} %>>
 					<option value="1">설정안함</option>
-					<option value="2">자동등업</option>
+					<option value="2"<%if(lv_Info != 0){if(lvInfoArr.get(2).getActivation() == 2 ){%> selected<%}}%>>자동등업</option>
 				</select>
 			</td>
 			<td>
-				<button type="button" id="deleteBtn_3" class="btn btn-primary btn-sm" onclick="levelDelete(3)">삭제</button>
-				<button type="button" id="plusBtn_3" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(3)">추가</button>				
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(2).getActivation() == 0){%>
+						<button type="button" id="deleteBtn_3" class="btn btn-primary btn-sm" style="display:none;" onclick="levelDelete(3)">삭제</button>
+						<button type="button" id="plusBtn_3" class="btn btn-primary btn-sm" onclick="levelPlus(3)">추가</button>
+					<%}else{%>
+						<button type="button" id="deleteBtn_3" class="btn btn-primary btn-sm" onclick="levelDelete(3)">삭제</button>
+						<button type="button" id="plusBtn_3" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(3)">추가</button>
+						<%}
+				}else{%>
+					<button type="button" id="deleteBtn_3" class="btn btn-primary btn-sm" onclick="levelDelete(3)">삭제</button>
+					<button type="button" id="plusBtn_3" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(3)">추가</button>	
+				<%} %>				
 			</td>
 		</tr>
 		<tr>
 			<td>④</td>
-			<td><input type="text" id="lvName_4" name="lvName_4" class="levelName-input" maxlength="7"></td>
-			<td><input type="text" id="explain_4" name="explain_4" class="explain" maxlength="36">
-				<p id="condition_4" style="display:none;">
-					<span class="p_font">게시글 </span><input type ="text" name="board_4" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">댓글 </span><input type = "text" name="comment_4" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">출석 </span><input type = "text" name="visit_4" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">회 만족 시 자동등업</span>
+			<td><input type="text" id="lvName_4" name="lvName_4" class="levelName-input" maxlength="7" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(3).getLevelName() %>"<%if(lvInfoArr.get(3).getActivation() == 0 ){%>disabled<%}} %>></td>
+			<td><input type="text" id="explain_4" name="explain_4" class="explain" maxlength="36" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(3).getLv_explain() %>"<%if(lvInfoArr.get(3).getActivation() == 0 ){%>disabled<%}} %>>
+				<p id="condition_4" <%if(lv_Info != 0){if(lvInfoArr.get(3).getActivation() != 2 ){%>style="display:none;"<%}}else{%>style="display:none;" <%} %>>
+					<span class="p_font">게시글 </span><input type ="text" name="board_4" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(3).getBoardC() %>"<%if(lvInfoArr.get(3).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">댓글 </span><input type = "text" name="comment_4" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(3).getCommentC() %>"<%if(lvInfoArr.get(3).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">출석 </span><input type = "text" name="visit_4" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(3).getVisitC() %>"<%if(lvInfoArr.get(3).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">회 만족 시 자동등업</span>
 				</p>
-				<p id="deleteMsg_4" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(3).getActivation() == 0 ){%>
+						<p id="deleteMsg_4" style="display:block;">해당등급이 삭제 되었습니다.</p>
+					<%}else{%>
+						<p id="deleteMsg_4" style="display:none;">해당등급이 삭제 되었습니다.</p>
+					<%} 
+				}else{%>
+					<p id="deleteMsg_4" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%}%>
 			</td>
 			<td>
-				<select id="selectLevel4" name="selectValue_4" class="selectValue" onchange="conditionChk(4)">
+				<select id="selectLevel4" name="selectValue_4" class="selectValue" onchange="conditionChk(4)" <%if(lv_Info != 0){ if(lvInfoArr.get(3).getActivation() == 0 ){%>disabled<%}} %>>
 					<option value="1">설정안함</option>
-					<option value="2">자동등업</option>
+					<option value="2"<%if(lv_Info != 0){if(lvInfoArr.get(3).getActivation() == 2 ){%> selected<%}}%>>자동등업</option>
 				</select>
 			</td>
 			<td>
-				<button type="button" id="deleteBtn_4" class="btn btn-primary btn-sm" onclick="levelDelete(4)">삭제</button>
-				<button type="button" id="plusBtn_4" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(4)">추가</button>				
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(3).getActivation() == 0){%>
+						<button type="button" id="deleteBtn_4" class="btn btn-primary btn-sm" style="display:none;" onclick="levelDelete(4)">삭제</button>
+						<button type="button" id="plusBtn_4" class="btn btn-primary btn-sm" onclick="levelPlus(4)">추가</button>
+					<%}else{%>
+						<button type="button" id="deleteBtn_4" class="btn btn-primary btn-sm" onclick="levelDelete(4)">삭제</button>
+						<button type="button" id="plusBtn_4" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(4)">추가</button>
+						<%}
+				}else{%>
+					<button type="button" id="deleteBtn_4" class="btn btn-primary btn-sm" onclick="levelDelete(4)">삭제</button>
+					<button type="button" id="plusBtn_4" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(4)">추가</button>	
+				<%} %>				
 			</td>
 		</tr>
 		<tr>
 			<td>⑤</td>
-			<td><input type="text" id="lvName_5" name="lvName_5" class="levelName-input" maxlength="7"></td>
-			<td><input type="text" id="explain_5" name="explain_5" class="explain" maxlength="36">
-				<p id="condition_5" style="display:none;">
-					<span class="p_font">게시글 </span><input type ="text" name="board_5" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">댓글 </span><input type = "text" name="comment_5" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">출석 </span><input type = "text" name="visit_5" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">회 만족 시 자동등업</span>
+			<td><input type="text" id="lvName_5" name="lvName_5" class="levelName-input" maxlength="7" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(4).getLevelName() %>"<%if(lvInfoArr.get(4).getActivation() == 0 ){%>disabled<%}} %>></td>
+			<td><input type="text" id="explain_5" name="explain_5" class="explain" maxlength="36" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(4).getLv_explain() %>"<%if(lvInfoArr.get(4).getActivation() == 0 ){%>disabled<%}} %>>
+				<p id="condition_5" <%if(lv_Info != 0){if(lvInfoArr.get(4).getActivation() != 2 ){%>style="display:none;"<%}}else{%>style="display:none;" <%} %>>
+					<span class="p_font">게시글 </span><input type ="text" name="board_5" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(4).getBoardC() %>"<%if(lvInfoArr.get(4).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">댓글 </span><input type = "text" name="comment_5" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(4).getCommentC() %>"<%if(lvInfoArr.get(4).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">출석 </span><input type = "text" name="visit_5" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(4).getVisitC() %>"<%if(lvInfoArr.get(4).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">회 만족 시 자동등업</span>
 				</p>
-				<p id="deleteMsg_5" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(4).getActivation() == 0 ){%>
+						<p id="deleteMsg_5" style="display:block;">해당등급이 삭제 되었습니다.</p>
+					<%}else{%>
+						<p id="deleteMsg_5" style="display:none;">해당등급이 삭제 되었습니다.</p>
+					<%} 
+				}else{%>
+					<p id="deleteMsg_5" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%}%>
 			</td>
 			<td>
-				<select id="selectLevel5" name="selectValue_5" class="selectValue" onchange="conditionChk(5)">
+				<select id="selectLevel5" name="selectValue_5" class="selectValue" onchange="conditionChk(5)" <%if(lv_Info != 0){ if(lvInfoArr.get(4).getActivation() == 0 ){%>disabled<%}} %>>
 					<option value="1">설정안함</option>
-					<option value="2">자동등업</option>
+					<option value="2"<%if(lv_Info != 0){if(lvInfoArr.get(4).getActivation() == 2 ){%> selected<%}}%>>자동등업</option>
 				</select>
 			</td>
 			<td>
-				<button type="button" id="deleteBtn_5" class="btn btn-primary btn-sm" onclick="levelDelete(5)">삭제</button>
-				<button type="button" id="plusBtn_5" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(5)">추가</button>				
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(4).getActivation() == 0){%>
+						<button type="button" id="deleteBtn_5" class="btn btn-primary btn-sm" style="display:none;" onclick="levelDelete(5)">삭제</button>
+						<button type="button" id="plusBtn_5" class="btn btn-primary btn-sm" onclick="levelPlus(5)">추가</button>
+					<%}else{%>
+						<button type="button" id="deleteBtn_5" class="btn btn-primary btn-sm" onclick="levelDelete(5)">삭제</button>
+						<button type="button" id="plusBtn_5" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(5)">추가</button>
+						<%}
+				}else{%>
+					<button type="button" id="deleteBtn_5" class="btn btn-primary btn-sm" onclick="levelDelete(5)">삭제</button>
+					<button type="button" id="plusBtn_5" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(5)">추가</button>	
+				<%} %>			
 			</td>
 		</tr>
 		<tr>
 			<td>⑥</td>
-			<td><input type="text" id="lvName_6" name="lvName_6" class="levelName-input" maxlength="7"></td>
-			<td><input type="text" id="explain_6" name="explain_6" class="explain" maxlength="36">
-				<p id="condition_6" style="display:none;">
-					<span class="p_font">게시글 </span><input type ="text" name="board_6" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">댓글 </span><input type = "text" name="comment_6" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">개,</span>
-					<span class="p_font">출석 </span><input type = "text" name="visit_6" class="p_input" maxlength="5" autocomplete="off"><span class="p_font">회 만족 시 자동등업</span>
+			<td><input type="text" id="lvName_6" name="lvName_6" class="levelName-input" maxlength="7" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(5).getLevelName() %>"<%if(lvInfoArr.get(5).getActivation() == 0 ){%>disabled<%}} %>></td>
+			<td><input type="text" id="explain_6" name="explain_6" class="explain" maxlength="36" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(5).getLv_explain() %>"<%if(lvInfoArr.get(5).getActivation() == 0 ){%>disabled<%}} %>>
+				<p id="condition_6" <%if(lv_Info != 0){if(lvInfoArr.get(5).getActivation() != 2 ){%>style="display:none;"<%}}else{%>style="display:none;" <%} %>>
+					<span class="p_font">게시글 </span><input type ="text" name="board_6" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(5).getBoardC() %>"<%if(lvInfoArr.get(5).getActivation() == 0 ){%>disabled<%}} %>><span class="p_font">개,</span>
+					<span class="p_font">댓글 </span><input type = "text" name="comment_6" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(5).getCommentC() %>"<%}if(lvInfoArr.get(5).getActivation() == 0 ){%>disabled<%} %>><span class="p_font">개,</span>
+					<span class="p_font">출석 </span><input type = "text" name="visit_6" class="p_input" maxlength="5" autocomplete="off" <%if(lv_Info != 0){ %>value="<%= lvInfoArr.get(5).getVisitC() %>"<%}if(lvInfoArr.get(5).getActivation() == 0 ){%>disabled<%} %>><span class="p_font">회 만족 시 자동등업</span>
 				</p>
-				<p id="deleteMsg_6" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(5).getActivation() == 0 ){%>
+						<p id="deleteMsg_6" style="display:block;">해당등급이 삭제 되었습니다.</p>
+					<%}else{%>
+						<p id="deleteMsg_6" style="display:none;">해당등급이 삭제 되었습니다.</p>
+					<%} 
+				}else{%>
+					<p id="deleteMsg_6" style="display:none;">해당등급이 삭제 되었습니다.</p>
+				<%}%>
 			</td>
 			<td>
-				<select id="selectLevel6" name="selectValue_6" class="selectValue" onchange="conditionChk(6)">
+				<select id="selectLevel6" name="selectValue_6" class="selectValue" onchange="conditionChk(6)" <%if(lv_Info != 0){ if(lvInfoArr.get(5).getActivation() == 0 ){%>disabled<%}} %>>
 					<option value="1">설정안함</option>
-					<option value="2">자동등업</option>
+					<option value="2"<%if(lv_Info != 0){if(lvInfoArr.get(5).getActivation() == 2 ){%> selected<%}}%>>자동등업</option>
 				</select>
 			</td>
 			<td>
-				<button type="button" id="deleteBtn_6" class="btn btn-primary btn-sm" onclick="levelDelete(6)">삭제</button>
-				<button type="button" id="plusBtn_6" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(6)">추가</button>				
+				<%if(lv_Info != 0){ 
+					if(lvInfoArr.get(5).getActivation() == 0){%>
+						<button type="button" id="deleteBtn_6" class="btn btn-primary btn-sm" style="display:none;" onclick="levelDelete(6)">삭제</button>
+						<button type="button" id="plusBtn_6" class="btn btn-primary btn-sm" onclick="levelPlus(6)">추가</button>
+					<%}else{%>
+						<button type="button" id="deleteBtn_6" class="btn btn-primary btn-sm" onclick="levelDelete(6)">삭제</button>
+						<button type="button" id="plusBtn_6" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(6)">추가</button>
+						<%}
+				}else{%>
+					<button type="button" id="deleteBtn_6" class="btn btn-primary btn-sm" onclick="levelDelete(6)">삭제</button>
+					<button type="button" id="plusBtn_6" class="btn btn-primary btn-sm" style="display:none;" onclick="levelPlus(6)">추가</button>	
+				<%} %>				
 			</td>
 		</tr>
 		
 	</tbody>
 </table>
-<center style="margin-top:15px;"><button type="submit" class="btn btn-primary" onclick="saveLevelInfo()">저장하기</button></center>
-<!-- </form> -->
+<center style="margin-top:15px;"><button type="submit" class="btn btn-primary">저장하기</button></center>
+</form>
 <script>
 function conditionChk(num){
 	var s_idChk = "selectLevel" + num;
@@ -353,6 +453,8 @@ function saveLevelInfo(){
 	   var comment = "comment_" + chkCountArr[i];
 	   var visit = "visit_" + chkCountArr[i];
 	   if(chkCountArr[i+1]){
+	   var lvName = "lvName_" + chkCountArr[i+1];
+	   var lvNameVal = document.getElementById(lvName).value;
 	   var board2 = "board_" + chkCountArr[i+1];
 	   var b1 = document.getElementsByName(board)[0].value;
 	   var b2 = document.getElementsByName(board2)[0].value; 
@@ -386,14 +488,19 @@ function saveLevelInfo(){
 		   }
 
 		   var result = bchk + cchk + vchk;
-		   if(result <= 3){   // 등급 조건중 최소 한개 이상은 전에 값보다 커야한다. 
-				alert(board2 + "의 등업 조건이 낮은 등급보다 높아야 합니다");
+		   if(bchk == 0 || cchk == 0 || vchk == 0){
+			   alert(lvNameVal + "의 등업 조건이 낮은 등급보다 높아야 합니다");
+			   event.preventDefault();
+			   return false;
+		   }else if(result <= 3){   // 등급 조건중 최소 한개 이상은 전에 값보다 커야한다. 
+				alert(lvNameVal + "의 등업 조건이 낮은 등급보다 높아야 합니다");
+				event.preventDefault();
 			   return false;
 		   }
 		   
 	   }
    }
-   alert("전송");
+
 }
 </script>
 
