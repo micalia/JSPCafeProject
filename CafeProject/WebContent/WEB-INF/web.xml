@@ -43,7 +43,7 @@
 		<location>/etc02/noPage.jsp</location>
 	</error-page>
 	
-<security-constraint>
+<!-- <security-constraint>
     <web-resource-collection>
         <web-resource-name>SSL Forward</web-resource-name>
         <url-pattern>/*</url-pattern>
@@ -51,6 +51,8 @@
     <user-data-constraint>
         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
-</security-constraint>
+</security-constraint> -->
+
+
 
 </web-app>

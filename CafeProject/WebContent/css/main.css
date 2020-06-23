@@ -1,0 +1,186 @@
+body{
+  width:1080px;
+  margin: 0 auto;
+}
+p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea,button, select {
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+}
+
+  #banner{
+    border: 1px solid;
+    width:1080px;
+    height: 180px;
+  }
+  
+  #banner:hover{
+  	cursor:pointer;
+  }
+  #bodyLeft{
+    width:200px;
+  }
+  #profile{
+    overflow: hidden;
+    height: auto;
+    border: 1px solid;
+  }
+  ul, li, ol, dl{
+    list-style: none;
+  }
+  nav{
+    float: left;
+    margin-top:5px;
+  }
+  .navStyle{
+  	width:200px;
+  	border: 1px solid black;
+  }
+  article{
+    float: right;
+  }
+  .profileTop{
+    overflow: hidden;
+    padding: 5px 10px;
+    display: table;
+  margin-left: auto;
+  margin-right: auto;
+  }
+  .profileTop li{
+    float:left;
+    width: 72px;
+    padding-top: 3px;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    color: #959595;
+  }
+  
+  .profileImg{
+	border: 1px solid;
+	width: 58px;
+	height: 58px; 
+	border: 1px solid rgba(0, 0, 0, 0.04);
+	float:left; 
+	border-radius:22px; 
+	margin-right: 8px;
+  }
+  .cafe_intro{
+  border:4px solid #eee;
+    overflow:hidden;
+    width:860px;
+    height: auto;
+    padding:8px 5px;
+  }
+
+  .content-area{
+    overflow:hidden;
+    height:auto;
+    width:1080px;
+    margin-top: 14px;
+  }
+.liUnder:hover{
+  text-decoration: underline;
+  cursor:pointer;
+}
+table{
+    width: 100%;
+}
+
+.tableContainer{
+    margin-top:24px;
+}
+.main-area{
+    float:right;
+    width:860px;
+}
+.side-area{
+    float:left;
+    width:200px;
+}
+td{
+    padding:4px 7px;
+}
+.td_subject{
+    padding-left:8px;
+    padding-right:18px;
+}
+.subjectcss{
+    color:black;
+}
+.subjectcss:hover{
+    color:black;
+}
+
+.footer{
+        margin-top:60px;
+        border-top-color:black;
+        border-top-width:2px;
+        padding:24px 0px 24px 0px;
+        border-top-style:solid;
+        clear: both;
+    }
+    #menuIcon{
+    margin-bottom:5px;
+    }
+    #info-data1{
+    	padding: 12px 10px;
+    	overflow: hidden;
+    	width: 100%;
+    }
+    #info-data2{
+    	padding: 12px 10px;
+    	overflow: hidden;
+    	width: 100%;
+    }
+    .cafe-menu-all-list{
+    	margin:10px;
+    	margin-top:5px;
+    	margin-bottom:3px;
+    }
+    .cafe-menu-list{
+    	margin:10px;
+    	margin-top:3px;
+    	margin-bottom:5px;
+    }
+    .cafe-menu-space{
+    	    border-top: 1px solid #e5e5e5;
+    	    height: 2px;
+    }
+    .cafe-menu-list a{
+    	color:black;
+    }
+    .infoText{
+    	cursor:pointer;
+    }
+    .infoText:hover{
+    	text-decoration:underline;
+    }
+    .infoTextActive{
+    	color:black;
+    }
+    .infoTextActive:hover{
+    	text-decoration:none;
+    	cursor:text;
+    }
+    .topbar{
+    	margin:1px 0px;
+    }
+    .nickText{
+    	float:right;
+    	text-overflow:ellipsis;
+    	overflow:hidden;
+    	width:112px;
+    	white-space:nowrap;
+    }
+    #searchBar{
+    	width:295px;
+    	float:right;
+    	border-radius:0px;
+    }
+    .searchBox{
+    	margin-top:7px;
+    	margin-bottom:-8px;
+    	overflow:hidden;
+    }

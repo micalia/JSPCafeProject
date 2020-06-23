@@ -4,6 +4,8 @@
     <%@ page import="admins.AdminsDAO" %>
     <%@ page import="boards.Board_ids" %>
     <%@ page import="users.UsersDAO" %>
+    <%@ page import="users.Users" %>
+    <%@ page import="admins.Level_name" %>
     <%@ page import="java.util.ArrayList" %>
 
 <!DOCTYPE html>
@@ -16,195 +18,7 @@
     <script src="<%=request.getContextPath()%>/js/jquery-3.4.1.min.js"></script>
     <script src="<%=request.getContextPath()%>/summernote/popper.min.js"></script>
     <script src="<%=request.getContextPath()%>/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-    
-<style>
-body{
-  width:1080px;
-  margin: 0 auto;
-}
-p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea,button, select {
-    margin: 0;
-    padding: 0;
-    font-size: 15px;
-}
-
-  #banner{
-    border: 1px solid;
-    width:1080px;
-    height: 180px;
-  }
-  
-  #banner:hover{
-  	cursor:pointer;
-  }
-  #bodyLeft{
-    width:200px;
-  }
-  #profile{
-    overflow: hidden;
-    height: auto;
-    border: 1px solid;
-  }
-  ul, li, ol, dl{
-    list-style: none;
-  }
-  nav{
-    float: left;
-    margin-top:5px;
-  }
-  .navStyle{
-  	width:200px;
-  	border: 1px solid black;
-  }
-  article{
-    float: right;
-  }
-  .profileTop{
-    overflow: hidden;
-    padding: 5px 10px;
-    display: table;
-  margin-left: auto;
-  margin-right: auto;
-  }
-  .profileTop li{
-    float:left;
-    width: 72px;
-    padding-top: 3px;
-    font-weight: bold;
-    font-size: 15px;
-    line-height: 20px;
-    text-align: center;
-    color: #959595;
-  }
-  
-  .profileImg{
-	border: 1px solid;
-	width: 58px;
-	height: 58px; 
-	border: 1px solid rgba(0, 0, 0, 0.04);
-	float:left; 
-	border-radius:22px; 
-	margin-right: 8px;
-  }
-  .cafe_intro{
-  border:4px solid #eee;
-    overflow:hidden;
-    width:860px;
-    height: auto;
-    padding:8px 5px;
-  }
-
-  .content-area{
-    overflow:hidden;
-    height:auto;
-    width:1080px;
-    margin-top: 14px;
-  }
-.liUnder:hover{
-  text-decoration: underline;
-  cursor:pointer;
-}
-table{
-    width: 100%;
-}
-
-.tableContainer{
-    margin-top:24px;
-}
-.main-area{
-    float:right;
-    width:860px;
-}
-.side-area{
-    float:left;
-    width:200px;
-}
-td{
-    padding:4px 7px;
-}
-.td_subject{
-    padding-left:8px;
-    padding-right:18px;
-}
-.subjectcss{
-    color:black;
-}
-.subjectcss:hover{
-    color:black;
-}
-
-.footer{
-        margin-top:60px;
-        border-top-color:black;
-        border-top-width:2px;
-        padding:24px 0px 24px 0px;
-        border-top-style:solid;
-        clear: both;
-    }
-    #menuIcon{
-    margin-bottom:5px;
-    }
-    #info-data1{
-    	padding: 12px 10px;
-    	overflow: hidden;
-    	width: 100%;
-    }
-    #info-data2{
-    	padding: 12px 10px;
-    	overflow: hidden;
-    	width: 100%;
-    }
-    .cafe-menu-all-list{
-    	margin:10px;
-    	margin-top:5px;
-    	margin-bottom:3px;
-    }
-    .cafe-menu-list{
-    	margin:10px;
-    	margin-top:3px;
-    	margin-bottom:5px;
-    }
-    .cafe-menu-space{
-    	    border-top: 1px solid #e5e5e5;
-    	    height: 2px;
-    }
-    .cafe-menu-list a{
-    	color:black;
-    }
-    .infoText{
-    	cursor:pointer;
-    }
-    .infoText:hover{
-    	text-decoration:underline;
-    }
-    .infoTextActive{
-    	color:black;
-    }
-    .infoTextActive:hover{
-    	text-decoration:none;
-    	cursor:text;
-    }
-    .topbar{
-    	margin:1px 0px;
-    }
-    .nickText{
-    	float:right;
-    	text-overflow:ellipsis;
-    	overflow:hidden;
-    	width:112px;
-    	white-space:nowrap;
-    }
-    #searchBar{
-    	width:295px;
-    	float:right;
-    	border-radius:0px;
-    }
-    .searchBox{
-    	margin-top:7px;
-    	margin-bottom:-8px;
-    	overflow:hidden;
-    }
-</style>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/main.css">
   </head>
   <body>
    <%
@@ -230,6 +44,7 @@ td{
 	int visitCount = 0;
 	int writeCount = 0;
 	int commentCount = 0;
+	Users user = new Users();
 	if(id != null){
 		timeChk = usersDAO.checkGap(id);
 		if(timeChk > 30){
@@ -237,11 +52,49 @@ td{
 		}else{
 			usersDAO.recVisUpdate(id);//최근방문일 update
 		}
-		visitCount = usersDAO.getVisitCount(id);
+		user = usersDAO.getUserInfo(id);
 	}
 	String find = request.getParameter("find");//list.jsp, view.jsp find변수 사용
 	String search = request.getParameter("search");//list.jsp, view.jsp search변수 사용
 	BoardsDAO boardsDAO = new BoardsDAO();
+	
+	//현재 로그인 한 유저의 글작성수, 댓글수 , 방문수
+	writeCount = user.getWriteCount();
+	commentCount = user.getCommentCount();
+	visitCount = user.getVisitCount();
+	
+	Level_name level_name = new Level_name();
+	AdminsDAO adminsDAO = new AdminsDAO(); 
+	if(id != null){
+		ArrayList<Level_name> userLvInfo = adminsDAO.getLevelInfo();
+		for(int i = 0; i < userLvInfo.size(); i++){
+			//관리자페이지에서 설정한 레벨 업 조건 을 비교해서 다 true면 다음 조건 실행
+			if(userLvInfo.get(i).getBoardC() <= writeCount && 
+				userLvInfo.get(i).getVisitC() <= visitCount && 
+				userLvInfo.get(i).getCommentC() <= commentCount){
+				//레벨업 조건을 모두 만족하면, 조건의 레벨보다 현재 레벨이 큰지 확인한다
+				//만약 조건에 모두 만족하는 데 작을경우 다음 조건을 실행
+				if(userLvInfo.get(i).getLevel() > level){
+					//만약 조건이 자동등업이면 조건에 맞는 레벨로 레벨업.
+					if(userLvInfo.get(i).getActivation() == 2){
+						usersDAO.levelUp(id, userLvInfo.get(i).getLevel());
+						%>
+						<script>
+						alert("축하합니다. <%= nick%>님은 <%= userLvInfo.get(i).getLevelName()%> 등급이 되셨습니다.");
+						window.location.reload();
+						</script>
+						<%
+						session.setAttribute("level", userLvInfo.get(i).getLevel());
+					}
+				}
+			}else{
+				break;
+			}
+			
+		}
+	
+	}
+	
 	%>
 	<div class="topbar">
 	<%
@@ -261,7 +114,7 @@ td{
 </div>
 <div id="banner" style="clear:both;"onclick = "location.href='<%=request.getContextPath()%>/home.jsp'" >
     <a href ="<%=request.getContextPath()%>/home.jsp">
-    <% AdminsDAO adminsDAO = new AdminsDAO(); 
+    <% 
     String titleImg = adminsDAO.getTitleImg();
     if(titleImg == null){
     %>
@@ -311,8 +164,23 @@ td{
      <span class="nickText"><%= nick %></span>
     	 <br>
  
-       레벨 : <%= level %><br>
-    방문수 : <%= visitCount %>
+       등급 : <%
+       if(id != null){
+   		ArrayList<Level_name> userLvInfo = adminsDAO.getLevelInfoAdmin(); // 관리자가 설정한 멤버 등급정보를 모두 가져옴
+	   		for(int i = 0; i < userLvInfo.size(); i++){
+	   			if(userLvInfo.get(i).getLevel() == level){
+	   				%>
+	   				<%= userLvInfo.get(i).getLevelName() %>
+	   				<%
+	   			}
+	   		}
+       }
+       %><br>
+    방문수 : <%= visitCount %><br>
+    내가 쓴 글 : <%= writeCount%><br>
+    내가 쓴 댓글 : <%= commentCount%>
+
+    
       </div>
 <%} %>
 	<%
@@ -393,15 +261,7 @@ td{
 	</li>
 	<li>
 	<span style="margin-left:-3px;">◎</span>
-		<a href = "<%=request.getContextPath()%>/GPS.jsp" style="color:black;">GPS</a>
-	</li>
-	<li>
-	<span style="margin-left:-3px;">◎</span>
-		<a href = "<%=request.getContextPath()%>/GPS2.jsp" style="color:black;">GPS2</a>
-	</li>
-	<li>
-	<span style="margin-left:-3px;">◎</span>
-		<a href = "<%=request.getContextPath()%>/GPS3.jsp" style="color:black;">GPS3</a>
+		<a href = "https://54.180.24.137:8443/project/historyView.jsp" target="_blank" style="color:black;">History View</a>
 	</li>
 </ul>
 <div class = "cafe-menu-space"></div>

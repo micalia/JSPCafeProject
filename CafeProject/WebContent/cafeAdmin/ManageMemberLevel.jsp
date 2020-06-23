@@ -62,7 +62,7 @@ if(lv_Info == 0){%>
 		});
 	</script>
 <%}else{
-	lvInfoArr = adminsDAO.getLevelInfo();
+	lvInfoArr = adminsDAO.getLevelInfoAdmin();
 }
 %>
 <center style="margin-top:31px;">

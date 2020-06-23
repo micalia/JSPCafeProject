@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import boards.Board_ids;
+import users.Users;
+
 
 public class AdminsDAO {
 
@@ -425,6 +427,32 @@ return -1;
 	}
 	
 	public ArrayList<Level_name> getLevelInfo() {
+		String SQL = "select * from level_name where activation >= 1";
+		ArrayList<Level_name> levelInfo = new ArrayList<Level_name>();
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Level_name level_name = new Level_name();
+
+				level_name.setLevel(rs.getInt(1));
+				level_name.setLevelName(rs.getString(2));
+				level_name.setLv_explain(rs.getString(3));
+				level_name.setBoardC(rs.getInt(4));
+				level_name.setCommentC(rs.getInt(5));
+				level_name.setVisitC(rs.getInt(6));
+				level_name.setActivation(rs.getInt(7));
+
+				levelInfo.add(level_name);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return levelInfo;
+	}
+	
+	public ArrayList<Level_name> getLevelInfoAdmin() {
 		String SQL = "select * from level_name";
 		ArrayList<Level_name> levelInfo = new ArrayList<Level_name>();
 		try {
@@ -449,4 +477,6 @@ return -1;
 		}
 		return levelInfo;
 	}
+	
+	
 }

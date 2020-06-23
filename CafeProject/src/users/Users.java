@@ -10,7 +10,8 @@ public class Users {
 	private String phone;
 	private int level;
 	private String joinDate;
-	private String recentVisit;
+	private String recentVisit;	
+	private int visitCount;
 	private int writeCount;
 	private int commentCount;
 	
@@ -73,6 +74,12 @@ public class Users {
 	}
 	public void setRecentVisit(String recentVisit) {
 		this.recentVisit = recentVisit;
+	}
+	public int getVisitCount() {
+		return visitCount;
+	}
+	public void setVisitCount(int visitCount) {
+		this.visitCount = visitCount;
 	}
 	public int getWriteCount() {
 		return writeCount;

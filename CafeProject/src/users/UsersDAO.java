@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import users.Users;
 
 public class UsersDAO {
 
@@ -22,6 +23,25 @@ public class UsersDAO {
 			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
 		}catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void levelUp(String id, int levelUp){
+		String sql = "update users set level = ? where id = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,levelUp);
+			pstmt.setString(2,id);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -74,19 +94,20 @@ public class UsersDAO {
 		return -1;
 	}
 	
-	public int getVisitCount(String id) {
-			int visitCount;
-			String SQL = "select visitCount from users where id = ?";
+	public Users getUserInfo(String id) {
+			String SQL = "select visitCount, writeCount, commentCount from users where id = ?";
 			try {
+				Users user = new Users();
 				pstmt = conn.prepareStatement(SQL);
 				pstmt.setString(1, id);
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
-					visitCount = rs.getInt(1);
+					user.setVisitCount(rs.getInt("visitCount"));
+					user.setWriteCount(rs.getInt("writeCount"));
+					user.setCommentCount(rs.getInt("commentCount"));
+					return user;
 					
-					return visitCount;
 				}
-				return -1; 
 			}catch(Exception e) {
 				e.printStackTrace();
 			}finally {
@@ -97,7 +118,7 @@ public class UsersDAO {
 					e.printStackTrace();
 				}
 			}
-			return -2; 
+			return null;
 	}
 	
 	public int writeCountUp(String id) {
