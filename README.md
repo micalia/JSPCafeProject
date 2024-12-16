@@ -1,8 +1,10 @@
 JSP, MySQL을 이용한 네이버 카페 클론 프로젝트
 
-개발기간 : 2020년 6월 ~ 8월 (약 2달)
+## 개발기간
+2020년 6월 ~ 8월 (약 2달)
 <br>
-시연영상 : https://youtu.be/qrIj0DtebWY
+## 시연영상
+https://youtu.be/qrIj0DtebWY
 <br>
 ## 구현기능
 - 회원가입 기능
